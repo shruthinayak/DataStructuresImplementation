@@ -21,7 +21,24 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
      */
    /* BinaryHeap(T n, Comparator comp) { *//* to be implemented *//*
     }*/
+
+    /**
+     * Create an empty priority queue of given maximum size
+     */
+    BinaryHeap(int n, Comparator<T> comp) { /* to be implemented */
+        pq = (T[]) new Object[n];
+        c = comp;
+
+    }
+
+
     public void heapSort(T[] A, Comparator comp) { /* to be implemented */
+        BinaryHeap<T> heap = new BinaryHeap<>(A, comp);
+        heap.buildHeap(false);
+        int len = A.length - 1;
+        while (heap.size > 0) {
+            A[len--] = heap.remove();
+        }
 
     }
 
@@ -38,13 +55,31 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     }
 
     public void add(T x) { /* to be implemented */
+        if (size == pq.length - 1) {
+            resize();
+        }
+        size++;
+        pq[size] = x;
+        percolateUp(size);
+
+
     }
 
     public T remove() { /* to be implemented */
+        if (size > 0) {
+            T top = pq[1];
+            pq[1] = pq[size--];
+            percolateDown(1);
+            return top;
+        }
         return null;
     }
 
     public T peek() { /* to be implemented */
+
+        if (size > 0) {
+            return pq[1];
+        }
         return null;
     }
 
@@ -67,10 +102,10 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     void percolateDown(int i) { /* to be implemented */
 
         T x = pq[i];
-        while (2 * i < pq.length) {
+        while (2 * i <size) {
             T lchild = pq[2 * i];
             T rchild = null;
-            if ((2 * i + 1) < pq.length) {
+            if ((2 * i + 1) < size) {
                 rchild = pq[2 * i + 1];
             }
             int index;
@@ -133,5 +168,16 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
                 System.out.println(pq[i] + ":" + pq[x + 1]);
 
         }
+    }
+
+    public void resize() {
+        BinaryHeap<T> newPq = new BinaryHeap<T>(size * 2, c);
+//        T [] newPq= (T[]) new Object[size*2];
+        int i = 0;
+        for (T element : pq) {
+            newPq.pq[i++] = element;
+        }
+        pq = newPq.pq;
+        System.out.println("length of "+pq.length);
     }
 }

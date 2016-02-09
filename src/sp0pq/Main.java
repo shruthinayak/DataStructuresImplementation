@@ -1,5 +1,6 @@
 package sp0pq;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -22,8 +23,29 @@ public class Main {
                 else return 0;
             }
         };
+
+        Comparator heapComp = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                int b = (int) o1;
+                int a = (int) o2;
+                if (a > b)
+                    return -1;
+                else if (a < b)
+                    return 1;
+                else return 0;
+            }
+        };
         BinaryHeap<Integer> heap = new BinaryHeap<>(q, comp);
+        heap.add(6);
+
         heap.printParentWise();
+
+        System.out.println(heap.peek());
+        heap.remove();
+        heap.printParentWise();
+        heap.heapSort(q, heapComp);
+        System.out.println(Arrays.toString(q));
     }
 
 }
