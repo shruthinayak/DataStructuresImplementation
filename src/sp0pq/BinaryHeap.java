@@ -13,7 +13,7 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     BinaryHeap(T[] q, Comparator comp) {
         pq = q;
         c = comp;
-        buildHeap();
+        buildHeap(true);
     }
 
     /**
@@ -75,13 +75,15 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
             }
             int index;
             if (rchild != null) {
-                index = c.compare(lchild, rchild) == -1 ? 2 * i : 2 * i + 1;
+                index = c.compare(lchild, rchild) == 1 ? 2 * i : 2 * i + 1;
             } else {
                 index = 2 * i;
             }
             if (c.compare(x, pq[index]) == -1) {
                 swap(i, index);
                 i = index;
+            } else {
+                break;
             }
 
         }
@@ -97,12 +99,21 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     /**
      * Create a heap.  Precondition: none.
      */
-    void buildHeap() {
+    void buildHeap(boolean flag) {
 
-        for (int i = 1; i < pq.length; i++) {
-            size++;
-            percolateUp(size);
+        if (flag) {
+            for (int i = 1; i < pq.length; i++) {
+                size++;
+                percolateUp(i);
+            }
+        } else {
+            size = pq.length / 2;
+            for (int i = pq.length / 2 - 1; i >= 1; i--) {
+                size++;
+                percolateDown(i);
+            }
         }
+
 
     }
 
@@ -112,12 +123,12 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
        max heap ==> ascending order
      */
     public void printParentWise() {
-        for (int i = 1; i < size; i++) {
+        for (int i = 1; i <= size; i++) {
             int x = 2 * i;
-            boolean flag = x < size;
+            boolean flag = x <= size;
             if (flag)
                 System.out.println(pq[i] + ":" + pq[x]);
-            flag = x + 1 < size;
+            flag = x + 1 <= size;
             if (flag)
                 System.out.println(pq[i] + ":" + pq[x + 1]);
 
