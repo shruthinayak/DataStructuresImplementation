@@ -1,15 +1,15 @@
 package sp0pq;// Ver 1.0:  Wec, Feb 3.  Initial description.
 
-public interface PriorityQueueIfc {
-    void insert(int x);
+public interface PriorityQueueIfc<T> {
+    void insert(T x);
 
-    int deleteMin();
+    T deleteMin();
 
-    int min();
+    T min();
 
-    void add(int x);
+    void add(T x);
 
-    int remove();
+    T remove();
 
-    int peek();
+    T peek();
 }
