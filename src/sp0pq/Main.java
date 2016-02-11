@@ -8,9 +8,6 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 
-/**
- * Created by shruthi on 4/2/16.
- */
 public class Main {
     public static void main(String[] args) {
 
@@ -20,7 +17,7 @@ public class Main {
     }
 
     private static void indexedHeapExample() {
-        Graph graph = null;
+        Graph graph;
         Vertex[] verts = null;
         try {
             graph = Graph.createGraphFromUserInput(new Scanner(new File(
