@@ -13,15 +13,12 @@ public class Utility {
             public int compare(Object o1, Object o2) {
                 int a = (int) o1;
                 int b = (int) o2;
-                if (a > b)
-                    if (isAscending)
-                        return -1;
-                    else return 1;
-                else if (a < b)
-                    if (isAscending)
-                        return 1;
-                    else return -1;
-                else return 0;
+
+                if (isAscending)
+                    return a - b;
+                else
+                    return b - a;
+
             }
         };
     }

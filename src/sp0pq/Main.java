@@ -13,20 +13,13 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) {
-        //int[] q = {0,2,7,9,8,17,12};
-//        Integer[] q = {0, 12, 17, 8, 9, 7, 2, 1, 4, 5, 6, 13};
-        Integer[] q = {0, 150, 80, 40, 10, 70, 110, 30, 120, 140, 60, 50, 130, 100, 20, 90};
 
-        BinaryHeap<Integer> heap = new BinaryHeap<>(q, Utility.getComparator(true));
-        heap.add(6);
-        heap.printParentWise();
-        System.out.println(heap.peek());
-        heap.remove();
+        binaryHeapExample();
+        indexedHeapExample();
 
-        heap.printParentWise();
-        heap.heapSort(q, Utility.getComparator(false));
-        System.out.println(Arrays.toString(q));
+    }
 
+    private static void indexedHeapExample() {
         Graph graph = null;
         Vertex[] verts = null;
         try {
@@ -38,8 +31,23 @@ public class Main {
             System.out.println("edges.txt file not found.");
         }
 
-        IndexedHeap<Vertex, Vertex> iHeap = new IndexedHeap<>(verts, Utility.getComparator(true));
+        VertexIndex index = new VertexIndex();
+        IndexedHeap<Vertex, VertexIndex> iHeap = new IndexedHeap<>(verts, index, index);
+        iHeap.printParentWise();
+    }
 
+    private static void binaryHeapExample() {
+        Integer[] q = {0, 150, 80, 40, 10, 70, 110, 30, 120, 140, 60, 50, 130, 100, 20, 90};
+
+        BinaryHeap<Integer> heap = new BinaryHeap<>(q, Utility.getComparator(false));
+        heap.add(6);
+        heap.printParentWise();
+        System.out.println(heap.peek());
+        heap.remove();
+
+        heap.printParentWise();
+        heap.heapSort(q, Utility.getComparator(false));
+        System.out.println(Arrays.toString(q));
     }
 
 }

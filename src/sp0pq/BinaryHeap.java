@@ -89,8 +89,9 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
      */
     void percolateUp(int i) { /* to be implemented */
         pq[0] = pq[i]; //first copy the element to be percolated into another space thereby making pq[i] as the hole.
-        while (c.compare(pq[i / 2], pq[0]) == -1) { // compare the element to its parent
-            pq[i] = pq[i / 2]; //bring the parent down in case if the element is smaller than its parent.
+        while (c.compare(pq[i / 2], pq[0]) < 0) { // compare the element to its parent
+            swap(i, i / 2);
+            //pq[i] = pq[i / 2]; //bring the parent down in case if the element is smaller than its parent.
             i = i / 2;
         }
         pq[i] = pq[0];
@@ -110,11 +111,11 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
             }
             int index;
             if (rchild != null) {
-                index = c.compare(lchild, rchild) == 1 ? 2 * i : 2 * i + 1;
+                index = c.compare(lchild, rchild) > 0 ? 2 * i : 2 * i + 1;
             } else {
                 index = 2 * i;
             }
-            if (c.compare(x, pq[index]) == -1) {
+            if (c.compare(x, pq[index]) < 0) {
                 swap(i, index);
                 i = index;
             } else {
@@ -125,7 +126,7 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
         pq[i] = x;
     }
 
-    private void swap(int i, int j) {
+    protected void swap(int i, int j) {
         T temp = pq[i];
         pq[i] = pq[j];
         pq[j] = temp;
