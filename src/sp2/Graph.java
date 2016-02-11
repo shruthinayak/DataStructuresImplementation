@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-class Graph implements Iterable<Vertex>, Cloneable {
+public class Graph implements Iterable<Vertex>, Cloneable {
 	public List<Vertex> verts; // array of vertices
 	public int numNodes; // number of verices in the graph
 
@@ -29,9 +29,30 @@ class Graph implements Iterable<Vertex>, Cloneable {
 			verts.add(i, new Vertex(i));
 	}
 
+	public static Graph createGraphFromUserInput(Scanner in, boolean directed) {
+		// read the graph related parameters
+		int n = in.nextInt(); // number of vertices in the graph
+		int m = in.nextInt(); // number of edges in the graph
+
+		// create a graph instance
+		Graph g = new Graph(n);
+		for (int i = 0; i < m; i++) {
+			int u = in.nextInt(); // tail
+			int v = in.nextInt(); // head
+			int w = in.nextInt();
+			if (directed) {
+				g.addDirectedEdge(u, v, w); // draw a directed edge from u to v.
+			} else {
+				g.addEdge(u, v, w);
+			}
+		}
+		in.close();
+		return g;
+	}
+
 	/**
 	 * Method to add an edge to the graph
-	 * 
+	 *
 	 * @param a
 	 *            : int - one end of edge
 	 * @param b
@@ -51,7 +72,7 @@ class Graph implements Iterable<Vertex>, Cloneable {
 
 	/**
 	 * Method to add an arc (directed edge) to the graph
-	 * 
+	 *
 	 * @param a
 	 *            : int - the head of the arc
 	 * @param b
@@ -75,22 +96,26 @@ class Graph implements Iterable<Vertex>, Cloneable {
 		return new VertexIterator();
 	}
 
+	public List<Vertex> getRoots() {
+		ArrayList<Vertex> roots = new ArrayList<>();
+		for (Vertex v : verts) {
+			if (v != null && v.degree == 0) {
+				roots.add(v);
+			}
+		}
+		return roots;
+	}
+
 	/**
 	 * A Custom Iterator Class for iterating through the vertices in a graph
-	 * 
-	 * 
-	 * @param <Vertex>
+	 *
 	 */
 	private class VertexIterator implements Iterator<Vertex> {
 		private Iterator<Vertex> it;
 
 		/**
 		 * Constructor for VertexIterator
-		 * 
-		 * @param v
-		 *            : Array of vertices
-		 * @param n
-		 *            : int - Size of the graph
+		 *
 		 */
 		private VertexIterator() {
 			it = verts.iterator();
@@ -119,36 +144,5 @@ class Graph implements Iterable<Vertex>, Cloneable {
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
-	}
-	
-	public  List<Vertex> getRoots() {
-		ArrayList<Vertex> roots = new ArrayList<Vertex>();
-		for (Vertex v : verts) {
-			if (v!=null && v.degree == 0) {
-				roots.add(v);
-			}
-		}
-		return roots;
-	}
-	
-	public static Graph createGraphFromUserInput(Scanner in, boolean directed) {
-		// read the graph related parameters
-		int n = in.nextInt(); // number of vertices in the graph
-		int m = in.nextInt(); // number of edges in the graph
-
-		// create a graph instance
-		Graph g = new Graph(n);
-		for (int i = 0; i < m; i++) {
-			int u = in.nextInt(); // tail
-			int v = in.nextInt(); // head
-			int w = in.nextInt();
-			if (directed) {
-				g.addDirectedEdge(u, v, w); // draw a directed edge from u to v.
-			} else {
-				g.addEdge(u, v, w);
-			}
-		}
-		in.close();
-		return g;
 	}
 }
