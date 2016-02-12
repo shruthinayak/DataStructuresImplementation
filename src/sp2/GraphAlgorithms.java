@@ -313,7 +313,7 @@ public class GraphAlgorithms {
                     u.seen = true;
                     u.parent = e.otherEnd(u);
                     wmst = wmst + e.weight;
-                    System.out.println(e.toString() + " : " + e.weight + " : " + wmst);
+
                     for (Edge ed : u.Adj) {
                         if (!ed.otherEnd(u).seen)
                             heapEdges.add(ed);
@@ -321,19 +321,21 @@ public class GraphAlgorithms {
                 }
             }
         }
+        System.out.println(mstE.toString());
         System.out.println("MST weight: " + wmst);
         return wmst;
     }
 
     public static int MSTPrimsIndexedPQ(Graph g, Vertex src) {
+        System.out.println("PRIMS 2");
         resetSeen(g);
         resetParentNull(g);
-        Vertex[] q = new Vertex[g.numNodes + 1];
-        int i = 1;
+        Vertex[] q = new Vertex[g.verts.size()];
+        int i = 0;
         for (Vertex v : g.verts) {
             v.distance = Integer.MAX_VALUE;
-            if (v.name != 0)
-                q[i++] = v;
+
+            q[i++] = v;
         }
         src.seen = true;
         src.distance = 0;
@@ -343,27 +345,27 @@ public class GraphAlgorithms {
                 return o2.distance - o1.distance;
             }
         });
-        ArrayList<Vertex> mstE = new ArrayList<>();
+
+        HashMap<Vertex, Edge> mstE = new HashMap<>();
         int wmst = 0;
         while (!heap.isEmpty()) {
-
             Vertex u = (Vertex) heap.remove();
-            if (u == null) {
-                break;
-            }
-            mstE.add(u);
-            System.out.println(u.name);
             u.seen = true;
             wmst = wmst + u.distance;
 
             for (Edge e : u.Adj) {
                 Vertex v = e.otherEnd(u);
                 if (!v.seen && e.weight < v.distance) {
+                    mstE.putIfAbsent(v, e);
+                    mstE.put(v, e);
                     v.distance = e.weight;
                     heap.percolateUp(v.getIndex());
                 }
             }
         }
+
+        System.out.println(mstE.values().toString());
+        System.out.println("MST weight: " + wmst);
         return wmst;
     }
 

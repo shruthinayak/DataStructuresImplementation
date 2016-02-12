@@ -84,7 +84,7 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     }
 
     public boolean isEmpty() {
-        return pq.length == 0;
+        return size == 0;
     }
 
     /**
@@ -182,6 +182,5 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
             newPq.pq[i++] = element;
         }
         pq = newPq.pq;
-        System.out.println("length of " + pq.length);
     }
 }
