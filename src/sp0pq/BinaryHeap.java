@@ -10,7 +10,7 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     /**
      * Build a priority queue with a given array q
      */
-    BinaryHeap(T[] q, Comparator comp) {
+    public BinaryHeap(T[] q, Comparator comp) {
         pq = q;
         c = comp;
         buildHeap(true);
@@ -83,11 +83,15 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
         return null;
     }
 
+    public boolean isEmpty() {
+        return pq.length == 0;
+    }
+
     /**
      * @param i index of the element that needs to be fixed into its position in the heap.
      *          pq[i] may violate heap order with parent
      */
-    void percolateUp(int i) { /* to be implemented */
+    public void percolateUp(int i) { /* to be implemented */
         pq[0] = pq[i]; //first copy the element to be percolated into another space thereby making pq[i] as the hole.
         while (c.compare(pq[i / 2], pq[0]) < 0) { // compare the element to its parent
             swap(i, i / 2);
@@ -103,7 +107,7 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     void percolateDown(int i) { /* to be implemented */
 
         T x = pq[i];
-        while (2 * i <size) {
+        while (2 * i < size) {
             T lchild = pq[2 * i];
             T rchild = null;
             if ((2 * i + 1) < size) {
@@ -172,13 +176,12 @@ public class BinaryHeap<T> implements PriorityQueueIfc<T> {
     }
 
     public void resize() {
-        BinaryHeap<T> newPq = new BinaryHeap<T>(size * 2, c);
-//        T [] newPq= (T[]) new Object[size*2];
+        BinaryHeap<T> newPq = new BinaryHeap<>(size * 2, c);
         int i = 0;
         for (T element : pq) {
             newPq.pq[i++] = element;
         }
         pq = newPq.pq;
-        System.out.println("length of "+pq.length);
+        System.out.println("length of " + pq.length);
     }
 }

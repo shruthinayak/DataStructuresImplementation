@@ -1,5 +1,8 @@
 package sp2;
 
+import sp0pq.BinaryHeap;
+import sp0pq.IndexedHeap;
+
 import java.util.*;
 
 public class GraphAlgorithms {
@@ -280,6 +283,92 @@ public class GraphAlgorithms {
         return o;
     }
 
+    public static int MSTUsingPrims(Graph g, Vertex src) {
+        int wmst = 0;
+        resetSeen(g);
+        resetParentNull(g);
+        src.seen = true;
+        src.distance = 0;
+        int size = src.Adj.size();
+        Edge[] edges = new Edge[size + 1];
+        for (int i = 1; i <= size; i++) {
+            edges[i] = src.Adj.get(i - 1);
+        }
+        BinaryHeap<Edge> heapEdges = new BinaryHeap<>(edges, new Comparator<Edge>() {
+            @Override
+            public int compare(Edge e1, Edge e2) {
+
+                return e2.weight - e1.weight;
+            }
+        });
+
+        ArrayList<Edge> mstE = new ArrayList<>();
+
+        while (!heapEdges.isEmpty() && mstE.size() != (g.verts.size() - 2)) {
+            Edge e = heapEdges.remove();
+            if (e != null) {
+                Vertex u = e.From.seen ? e.To : e.From;
+                if (!u.seen) {
+                    mstE.add(e);
+                    u.seen = true;
+                    u.parent = e.otherEnd(u);
+                    wmst = wmst + e.weight;
+                    System.out.println(e.toString() + " : " + e.weight + " : " + wmst);
+                    for (Edge ed : u.Adj) {
+                        if (!ed.otherEnd(u).seen)
+                            heapEdges.add(ed);
+                    }
+                }
+            }
+        }
+        System.out.println("MST weight: " + wmst);
+        return wmst;
+    }
+
+    public static int MSTPrimsIndexedPQ(Graph g, Vertex src) {
+        resetSeen(g);
+        resetParentNull(g);
+        Vertex[] q = new Vertex[g.verts.size() - 1];
+        int i = 0;
+        for (Vertex v : g.verts) {
+            v.distance = Integer.MAX_VALUE;
+            if (v.name != 0)
+                q[i++] = v;
+        }
+        src.seen = true;
+        src.distance = 0;
+        IndexedHeap heap = new IndexedHeap<>(q, new Comparator<Vertex>() {
+            @Override
+            public int compare(Vertex o1, Vertex o2) {
+                return o2.distance - o1.distance;
+            }
+        });
+        ArrayList<Vertex> mstE = new ArrayList<>();
+        int wmst = 0;
+        while (!heap.isEmpty()) {
+            Vertex u = (Vertex) heap.remove();
+
+            mstE.add(u);
+            System.out.println(u.name);
+            u.seen = true;
+            wmst = wmst + u.distance;
+            System.out.println("MST weight: " + wmst);
+            for (Edge e : u.Adj) {
+                Vertex v = e.otherEnd(u);
+                if (!v.seen && e.weight < v.distance) {
+                    v.distance = e.weight;
+                    heap.percolateUp(v.getIndex());
+                }
+            }
+        }
+        return wmst;
+    }
+
+    private static void resetParentNull(Graph g) {
+        for (Vertex v : g.verts) {
+            v.parent = null;
+        }
+    }
 
     public static void resetSeen(Graph g) {
         for (Vertex v : g.verts) {

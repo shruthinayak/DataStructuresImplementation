@@ -3,10 +3,12 @@
  */
 package sp2;
 
+import sp0pq.Index;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vertex {
+public class Vertex implements Index {
     public int name; // name of the vertex
     public boolean seen; // flag to check if the vertex has already been visited
     public Vertex parent; // parent of the vertex
@@ -37,4 +39,13 @@ public class Vertex {
         return Integer.toString(name);
     }
 
+    @Override
+    public void putIndex(int index) {
+        this.index = index;
+    }
+
+    @Override
+    public int getIndex() {
+        return index;
+    }
 }

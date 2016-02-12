@@ -1,35 +1,36 @@
 package sp0pq;
 
 import sp2.Graph;
+import sp2.GraphAlgorithms;
 import sp2.Vertex;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.Comparator;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        binaryHeapExample();
-        indexedHeapExample();
-
+//        binaryHeapExample();
+//        indexedHeapExample();
+        Graph graph = Utility.getGraph();
+        GraphAlgorithms.MSTUsingPrims(graph, graph.verts.get(1));
+        GraphAlgorithms.MSTPrimsIndexedPQ(graph, graph.verts.get(1));
     }
 
     private static void indexedHeapExample() {
-        Graph graph;
-        Vertex[] verts = null;
-        try {
-            graph = Graph.createGraphFromUserInput(new Scanner(new File(
-                    "edges.txt")), true);
-            verts = graph.verts.toArray(new Vertex[graph.verts.size()]);
-
-        } catch (FileNotFoundException e) {
-            System.out.println("edges.txt file not found.");
+        List<Vertex> verts = Utility.getGraph().verts;
+        Vertex[] q = new Vertex[verts.size()];
+        int i = 0;
+        for (Vertex v : verts) {
+            q[i++] = v;
         }
-
-        VertexIndex index = new VertexIndex();
-        IndexedHeap<Vertex, VertexIndex> iHeap = new IndexedHeap<>(verts, index, index);
+        IndexedHeap iHeap = new IndexedHeap(q, new Comparator<Vertex>() {
+            @Override
+            public int compare(Vertex o1, Vertex o2) {
+                return o2.name - o1.name;
+            }
+        });
         iHeap.printParentWise();
     }
 

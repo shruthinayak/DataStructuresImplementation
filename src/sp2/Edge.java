@@ -7,7 +7,7 @@ package sp2;
 public class Edge {
 	public Vertex From; // tail vertex
 	public Vertex To; // head vertex
-	public int Weight;// weight of the arc
+	public int weight;// weight of the arc
 
 	/**
 	 * Constructor for Edge
@@ -22,7 +22,7 @@ public class Edge {
 	Edge(Vertex u, Vertex v, int w) {
 		From = u;
 		To = v;
-		Weight = w;
+		weight = w;
 	}
 
 	/**
