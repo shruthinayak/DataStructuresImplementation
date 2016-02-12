@@ -16,10 +16,16 @@ public class Main {
     public static void main(String[] args) {
 
         Main main = new Main(Utility.getGraph());
-        main.indexedHeapExample();
-        main.binaryHeapExample();
-        main.MSTUsingPrims(main.g.verts.get(1));
-        main.MSTPrimsIndexedPQ(main.g.verts.get(7));
+//        main.indexedHeapExample();
+//        main.binaryHeapExample();
+        long start = System.currentTimeMillis();
+        System.out.println("MST Weight: " + main.MSTUsingPrims(main.g.verts.get(1)));
+        long end = System.currentTimeMillis();
+        System.out.println("PRIMS 1: " + (end - start) + "ms");
+        start = System.currentTimeMillis();
+        System.out.println("MST Weight: " + main.MSTPrimsIndexedPQ(main.g.verts.get(1)));
+        end = System.currentTimeMillis();
+        System.out.println("PRIMS 2: " + (end - start) + "ms");
     }
 
     private void indexedHeapExample() {
@@ -90,13 +96,11 @@ public class Main {
                 }
             }
         }
-        System.out.println(mstE.toString());
-        System.out.println("MST weight: " + wmst);
+
         return wmst;
     }
 
     public int MSTPrimsIndexedPQ(Vertex src) {
-        System.out.println("PRIMS 2");
         resetSeen();
         resetParentNull();
         Vertex[] q = new Vertex[g.verts.size()];
@@ -132,9 +136,6 @@ public class Main {
                 }
             }
         }
-
-        System.out.println(mstE.values().toString());
-        System.out.println("MST weight: " + wmst);
         return wmst;
     }
 
