@@ -15,7 +15,7 @@ public class Main {
 //        indexedHeapExample();
         Graph graph = Utility.getGraph();
         GraphAlgorithms.MSTUsingPrims(graph, graph.verts.get(1));
-        GraphAlgorithms.MSTPrimsIndexedPQ(graph, graph.verts.get(1));
+        GraphAlgorithms.MSTPrimsIndexedPQ(graph, graph.verts.get(7));
     }
 
     private static void indexedHeapExample() {

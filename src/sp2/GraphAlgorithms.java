@@ -328,8 +328,8 @@ public class GraphAlgorithms {
     public static int MSTPrimsIndexedPQ(Graph g, Vertex src) {
         resetSeen(g);
         resetParentNull(g);
-        Vertex[] q = new Vertex[g.verts.size() - 1];
-        int i = 0;
+        Vertex[] q = new Vertex[g.numNodes + 1];
+        int i = 1;
         for (Vertex v : g.verts) {
             v.distance = Integer.MAX_VALUE;
             if (v.name != 0)
@@ -346,13 +346,16 @@ public class GraphAlgorithms {
         ArrayList<Vertex> mstE = new ArrayList<>();
         int wmst = 0;
         while (!heap.isEmpty()) {
-            Vertex u = (Vertex) heap.remove();
 
+            Vertex u = (Vertex) heap.remove();
+            if (u == null) {
+                break;
+            }
             mstE.add(u);
             System.out.println(u.name);
             u.seen = true;
             wmst = wmst + u.distance;
-            System.out.println("MST weight: " + wmst);
+
             for (Edge e : u.Adj) {
                 Vertex v = e.otherEnd(u);
                 if (!v.seen && e.weight < v.distance) {
