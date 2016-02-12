@@ -1,25 +1,29 @@
 package sp0pq;
 
+import sp2.Edge;
 import sp2.Graph;
-import sp2.GraphAlgorithms;
 import sp2.Vertex;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
+    Graph g;
 
-//        binaryHeapExample();
-//        indexedHeapExample();
-        Graph graph = Utility.getGraph();
-        GraphAlgorithms.MSTUsingPrims(graph, graph.verts.get(1));
-        GraphAlgorithms.MSTPrimsIndexedPQ(graph, graph.verts.get(7));
+    public Main(Graph graph) {
+        this.g = graph;
     }
 
-    private static void indexedHeapExample() {
-        List<Vertex> verts = Utility.getGraph().verts;
+    public static void main(String[] args) {
+
+        Main main = new Main(Utility.getGraph());
+        main.indexedHeapExample();
+        main.binaryHeapExample();
+        main.MSTUsingPrims(main.g.verts.get(1));
+        main.MSTPrimsIndexedPQ(main.g.verts.get(7));
+    }
+
+    private void indexedHeapExample() {
+        List<Vertex> verts = g.verts;
         Vertex[] q = new Vertex[verts.size()];
         int i = 0;
         for (Vertex v : verts) {
@@ -34,7 +38,7 @@ public class Main {
         iHeap.printParentWise();
     }
 
-    private static void binaryHeapExample() {
+    private void binaryHeapExample() {
         Integer[] q = {0, 150, 80, 40, 10, 70, 110, 30, 120, 140, 60, 50, 130, 100, 20, 90};
 
         BinaryHeap<Integer> heap = new BinaryHeap<>(q, Utility.getComparator(false));
@@ -46,6 +50,104 @@ public class Main {
         heap.printParentWise();
         heap.heapSort(q, Utility.getComparator(false));
         System.out.println(Arrays.toString(q));
+    }
+
+    public int MSTUsingPrims(Vertex src) {
+        int wmst = 0;
+        resetSeen();
+        resetParentNull();
+        src.seen = true;
+        src.distance = 0;
+        int size = src.Adj.size();
+        Edge[] edges = new Edge[size + 1];
+        for (int i = 1; i <= size; i++) {
+            edges[i] = src.Adj.get(i - 1);
+        }
+        BinaryHeap<Edge> heapEdges = new BinaryHeap<>(edges, new Comparator<Edge>() {
+            @Override
+            public int compare(Edge e1, Edge e2) {
+
+                return e2.weight - e1.weight;
+            }
+        });
+
+        ArrayList<Edge> mstE = new ArrayList<>();
+
+        while (!heapEdges.isEmpty() && mstE.size() != (g.verts.size() - 2)) {
+            Edge e = heapEdges.remove();
+            if (e != null) {
+                Vertex u = e.From.seen ? e.To : e.From;
+                if (!u.seen) {
+                    mstE.add(e);
+                    u.seen = true;
+                    u.parent = e.otherEnd(u);
+                    wmst = wmst + e.weight;
+
+                    for (Edge ed : u.Adj) {
+                        if (!ed.otherEnd(u).seen)
+                            heapEdges.add(ed);
+                    }
+                }
+            }
+        }
+        System.out.println(mstE.toString());
+        System.out.println("MST weight: " + wmst);
+        return wmst;
+    }
+
+    public int MSTPrimsIndexedPQ(Vertex src) {
+        System.out.println("PRIMS 2");
+        resetSeen();
+        resetParentNull();
+        Vertex[] q = new Vertex[g.verts.size()];
+        int i = 0;
+        for (Vertex v : g.verts) {
+            v.distance = Integer.MAX_VALUE;
+
+            q[i++] = v;
+        }
+        src.seen = true;
+        src.distance = 0;
+        IndexedHeap heap = new IndexedHeap<>(q, new Comparator<Vertex>() {
+            @Override
+            public int compare(Vertex o1, Vertex o2) {
+                return o2.distance - o1.distance;
+            }
+        });
+
+        HashMap<Vertex, Edge> mstE = new HashMap<>();
+        int wmst = 0;
+        while (!heap.isEmpty()) {
+            Vertex u = (Vertex) heap.remove();
+            u.seen = true;
+            wmst = wmst + u.distance;
+
+            for (Edge e : u.Adj) {
+                Vertex v = e.otherEnd(u);
+                if (!v.seen && e.weight < v.distance) {
+                    mstE.putIfAbsent(v, e);
+                    mstE.put(v, e);
+                    v.distance = e.weight;
+                    heap.percolateUp(v.getIndex());
+                }
+            }
+        }
+
+        System.out.println(mstE.values().toString());
+        System.out.println("MST weight: " + wmst);
+        return wmst;
+    }
+
+    private void resetParentNull() {
+        for (Vertex v : g.verts) {
+            v.parent = null;
+        }
+    }
+
+    public void resetSeen() {
+        for (Vertex v : g.verts) {
+            v.seen = false;
+        }
     }
 
 }
