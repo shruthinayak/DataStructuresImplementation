@@ -183,11 +183,11 @@ public class GraphAlgorithms {
         return conn;
     }
 
-    public static void testEulerian(Graph g) {
+    public static boolean testEulerian(Graph g) {
 
         ArrayList<Vertex> evenVertex = new ArrayList<Vertex>();
         ArrayList<Vertex> oddVertex = new ArrayList<Vertex>();
-        for (Vertex v : g.verts) {
+        for (Vertex v : g) {
             if (v != null) {
                 if (isDegreeEven(v))
                     evenVertex.add(v);
@@ -197,22 +197,22 @@ public class GraphAlgorithms {
         }
         if (checkConnected(g)) {
             System.out.println("Graph is connected");
-            if (evenVertex.size() == g.numNodes)
+
+            if (evenVertex.size() == g.numNodes) {
                 System.out.println("Graph is Eulerian");
-            else if (oddVertex.size() == 2)
+                return true;
+            } else if (oddVertex.size() == 2) {
                 // eulerian path exits
-                System.out
-                        .println("Graph has an Eulerian Path between vertices "
-                                + oddVertex.get(0) + " and " + oddVertex.get(1));
-            else
-                // not eulerian
-                System.out.println("Graph is not Eulerian. It has "
-                        + oddVertex.size() + " vertices of odd degree");
+                System.out.println("Graph has an Eulerian Path between vertices "
+                        + oddVertex.get(0) + " and " + oddVertex.get(1));
+                return true;
+            } else
+                System.out.println("Graph is not Eulerian. It has " + oddVertex.size() + " vertices of odd degree");
 
 
         } else
             System.out.println("Graph is not connected");
-
+        return false;
     }
 
 

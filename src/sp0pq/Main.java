@@ -1,5 +1,6 @@
 package sp0pq;
 
+import common.Utility;
 import sp2.Edge;
 import sp2.Graph;
 import sp2.Vertex;
@@ -15,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Main main = new Main(Utility.getGraph());
+        Main main = new Main(Utility.getGraph("/home/shruthi/AllFiles/OneDrive/Sem4/Impl/sp0pq-big.txt"));
 //        main.indexedHeapExample();
 //        main.binaryHeapExample();
         long start = System.currentTimeMillis();
