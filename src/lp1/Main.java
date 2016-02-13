@@ -2,17 +2,24 @@ package lp1;
 
 public class Main {
     public static void main(String[] args) {
-        String x = "9876540000987659";
-        String y = "10785621877891059";
-        System.out.println(x);
-        LargeInteger l = new LargeInteger(x);
-        LargeInteger m = new LargeInteger(y);
-        l.printList();
-        System.out.println(y);
-        m.printList();
-        l.add(l, m).printList();
-
-        l.subtract(l, m).printList();
+        LargeInteger a = new LargeInteger("1234567890123456789012345678901234567890");
+        LargeInteger b = new LargeInteger("999");
+        LargeInteger c = LargeInteger.add(a, b);
+        LargeInteger d = LargeInteger.subtract(c, a);
+//                LargeInteger e = LargeInteger.product(c, a);
+//                LargeInteger zero = new LargeInteger(0);
+//                LargeInteger f = LargeInteger.product(a, zero);
+//                LargeInteger two = new LargeInteger(2);
+//                LargeInteger g = LargeInteger.power(two, 1025);
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c=a+b = " + c);
+        System.out.println("a+b-a = " + d);
+//                System.out.println("a*c = " + e);
+//                System.out.println("a*0 = " + f);
+//                System.out.println("2^1025 = " + g);
+//                System.out.println("Internal representation:");
+//                g.printList();
+    }
     }
 
-}

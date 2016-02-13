@@ -8,8 +8,8 @@ import java.util.List;
  * Created by shruthi on 6/2/16.
  */
 public class LargeInteger {
+    final static int B = 1000;
     final int pow = 3;
-    final int B = 1000;
     List<Long> number = new ArrayList<>();
 
     LargeInteger(String s) {
@@ -28,16 +28,10 @@ public class LargeInteger {
     }
 
     static String leadingZeroes(String s, int pow) {
-        s = String.format(String.format("%%0%dd", pow), Long.parseLong(s));
-        return s;
+        return String.format(String.format("%%0%dd", pow), Long.parseLong(s));
     }
 
-    @Override
-    public String toString() {
-        return null;
-    }
-
-    LargeInteger add(LargeInteger a, LargeInteger b) {
+    static LargeInteger add(LargeInteger a, LargeInteger b) {
         Iterator aI = a.number.iterator();
         Iterator bI = b.number.iterator();
         LargeInteger result = new LargeInteger("");
@@ -58,7 +52,7 @@ public class LargeInteger {
         return result;
     }
 
-    LargeInteger subtract(LargeInteger a, LargeInteger b) {
+    static LargeInteger subtract(LargeInteger a, LargeInteger b) {
         boolean reverse = false;
         if (b.number.size() > a.number.size()) {
             reverse = true;
@@ -97,6 +91,21 @@ public class LargeInteger {
         return result;
     }
 
+    @Override
+    public String toString() {
+        int len = number.size() - 1;
+        StringBuilder sb = new StringBuilder();
+        for (int i = len; i >= 0; i--) {
+            Long aLong = number.get(i);
+            if (aLong != 0)
+                if (i != len)
+                    sb.append(leadingZeroes(aLong.toString(), pow));
+                else
+                    sb.append(aLong.toString());
+        }
+        return sb.toString();
+    }
+
     LargeInteger product(LargeInteger a, LargeInteger b) {
         return null;
     }
@@ -106,14 +115,6 @@ public class LargeInteger {
     }
 
     void printList() {
-        int len = number.size() - 1;
-        StringBuilder sb = new StringBuilder();
-        for (int i = len; i >= 0; i--) {
-            if (i != len)
-                sb.append(leadingZeroes(number.get(i).toString(), pow));
-            else
-                sb.append(number.get(i).toString());
-        }
-        System.out.println(sb.toString());
+        System.out.println(toString());
     }
 }
