@@ -10,6 +10,7 @@ import java.util.*;
 public class Main {
 
     public static int numEdges;
+    private static Vertex masterSrc;
 
     public static void main(String[] args) {
         String path = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp0-big.txt"; //took 57758ms
@@ -22,6 +23,10 @@ public class Main {
         long start = System.currentTimeMillis();
         Node eulerTour = findEulerTour(g);
         long end = System.currentTimeMillis();
+
+        g = Utility.getGraph(path);
+        verifyTour(g, eulerTour.link, masterSrc);
+
         System.out.println(eulerTour.size == numEdges);
         System.out.println(end - start + "ms");
     }
@@ -30,7 +35,7 @@ public class Main {
         HashMap<Vertex, Node> hm = new HashMap<>();
         Node root = new Node();
         Set<Vertex> q = new LinkedHashSet<>();
-        Vertex masterSrc = pickRandomVertex(g.verts);
+        masterSrc = pickRandomVertex(g.verts);
         q.add(masterSrc);
         hm.put(masterSrc, root);
         while (!q.isEmpty() && root.size != numEdges) {
@@ -63,9 +68,10 @@ public class Main {
         }
         return root;
     }
-    /*static boolean verifyTour(Graph g, Node tour, Vertex start){
 
-    }*/
+    static boolean verifyTour(Graph g, Node tour, Vertex start) {
+        return false;
+    }
 
     private static Vertex pickRandomVertex(List<Vertex> verts) {
         if (verts.size() != 1) {
