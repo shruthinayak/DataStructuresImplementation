@@ -11,9 +11,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-/**
- * Created by shruthi on 10/2/16.
- */
 public class Utility {
 
     public static Comparator getComparator(boolean isAscending) {
@@ -30,6 +27,12 @@ public class Utility {
 
             }
         };
+    }
+
+    public static void resetSeen(Graph g) {
+        for (Vertex v : g.verts) {
+            v.seen = false;
+        }
     }
 
     public static Graph getGraph(String path) {
