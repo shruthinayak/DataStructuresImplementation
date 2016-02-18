@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by shruthi on 6/2/16.
- */
+
 public class LargeInteger {
     final static int B = 1000;
     final int pow = 3;

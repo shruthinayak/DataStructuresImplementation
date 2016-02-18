@@ -5,7 +5,6 @@ package sp2;
  *
  */
 public class Edge {
-    public Vertex now;
     public Vertex From; // tail vertex
     public Vertex To; // head vertex
     public int weight;// weight of the arc

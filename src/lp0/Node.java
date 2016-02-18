@@ -7,7 +7,7 @@ import sp2.Edge;
  */
 public class Node {
     Edge edge;
-    Node link;
+    Node next;
     int size;
 
     Node(Edge edge) {
@@ -22,7 +22,7 @@ public class Node {
         Node t = this;
         while (t != null) {
             System.out.println(t.edge.toString());
-            t = t.link;
+            t = t.next;
         }
     }
 }
