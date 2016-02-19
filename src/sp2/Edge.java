@@ -26,6 +26,7 @@ public class Edge {
         From = u;
         To = v;
         weight = w;
+
     }
 
     /**

@@ -13,9 +13,9 @@ public class Main {
     private static Vertex masterSrc;
 
     public static void main(String[] args) {
-//        String path = "lp0-big.txt"; //took 57758ms 66197ms
+        String path = "lp0-big.txt"; //took 57758ms 66197ms // now taking only 5059ms
 //        String path = "lp0-s1-ck.txt";
-        String path = "edges.txt";
+//        String path = "edges.txt";
 
         Graph g = Utility.getGraph(path);
         System.out.println("Graph read");
@@ -27,7 +27,7 @@ public class Main {
         System.out.println(end - start + "ms");
 
 //        g = Utility.getGraph(path);
-        eulerTour.next.print();
+//        eulerTour.next.print();
         System.out.println(verifyTour(g, eulerTour.next, masterSrc));
     }
 
@@ -48,12 +48,13 @@ public class Main {
             Node nextLink = mergeNode.next;
             do {
                 if (vertex.degree > 0) {
-                    Edge edge = vertex.Adj.get(0);
+//                    Edge edge = vertex.Adj.get(0);
+                    Edge edge = vertex.getNextEdge();
                     edge.seen = true;
-                    vertex.Adj.remove(0);
+//                    vertex.Adj.remove(0);
                     vertex.degree--;
                     vertex = edge.otherEnd(vertex);
-                    vertex.Adj.remove(edge);
+//                    vertex.Adj.remove(edge);
                     vertex.degree--;
                     mergeNode.next = new Node(edge);
                     mergeNode = mergeNode.next;

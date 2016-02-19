@@ -19,6 +19,8 @@ public class Vertex implements Index {
     public int degree; // indegree in case of directed graph.
     public int index;
     public HashSet<Edge> AdjHashSet;
+    public int countEdge;
+
 
     /**
      * Constructor for the vertex
@@ -33,6 +35,15 @@ public class Vertex implements Index {
         revAdj = new ArrayList<>(); /* only for directed graphs */
         degree = n == 0 ? -1 : 0;
         AdjHashSet = new HashSet<>();
+        countEdge = 0;
+
+    }
+
+    public Edge getNextEdge() {
+        while (Adj.get(countEdge).seen) {
+            countEdge = (countEdge + 1);//%Adj.size();
+        }
+        return Adj.get(countEdge++);
     }
 
     /**
