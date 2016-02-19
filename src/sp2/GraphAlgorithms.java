@@ -105,15 +105,19 @@ public class GraphAlgorithms {
 
     }
 
+    public static Vertex getRandomVertex(Graph t) {
+        Random random = new Random();
+        int num = random.nextInt(t.numNodes - 1);
+        Vertex randRoot = t.verts.get(num + 1);
+        return randRoot;
+    }
     public static int diameter(Graph t) {
         resetSeen(t);
         Queue<Vertex> verQueue = new LinkedList<Vertex>();
         if (t.verts.isEmpty()) {
             return -1;
         }
-        Random random = new Random();
-        int num = random.nextInt(t.numNodes - 1);
-        Vertex randRoot = t.verts.get(num + 1);
+        Vertex randRoot = getRandomVertex(t);
         System.out.println("Random Root is " + randRoot);
         randRoot.distance = 0;
         randRoot.seen = true;
@@ -183,7 +187,7 @@ public class GraphAlgorithms {
         return conn;
     }
 
-    public static boolean testEulerian(Graph g) {
+    public static int testEulerian(Graph g) {
 
         ArrayList<Vertex> evenVertex = new ArrayList<Vertex>();
         ArrayList<Vertex> oddVertex = new ArrayList<Vertex>();
@@ -200,19 +204,19 @@ public class GraphAlgorithms {
 
             if (evenVertex.size() == g.numNodes) {
                 System.out.println("Graph is Eulerian");
-                return true;
+                return 0;
             } else if (oddVertex.size() == 2) {
                 // eulerian path exits
                 System.out.println("Graph has an Eulerian Path between vertices "
                         + oddVertex.get(0) + " and " + oddVertex.get(1));
-                return true;
+                return 1;
             } else
                 System.out.println("Graph is not Eulerian. It has " + oddVertex.size() + " vertices of odd degree");
 
 
         } else
             System.out.println("Graph is not connected");
-        return false;
+        return -1;
     }
 
 

@@ -5,6 +5,8 @@ package sp2;
  *
  */
 public class Edge {
+    public Vertex now;
+    public boolean seen;
     public Vertex From; // tail vertex
     public Vertex To; // head vertex
     public int weight;// weight of the arc
@@ -20,6 +22,7 @@ public class Edge {
 	 *            : int - The weight associated with the arc
      */
     Edge(Vertex u, Vertex v, int w) {
+        seen = false;
         From = u;
         To = v;
         weight = w;

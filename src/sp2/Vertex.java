@@ -6,6 +6,7 @@ package sp2;
 import sp0pq.Index;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class Vertex implements Index {
@@ -13,10 +14,11 @@ public class Vertex implements Index {
     public boolean seen; // flag to check if the vertex has already been visited
     public Vertex parent; // parent of the vertex
     public int distance; // distance to the vertex from the source vertex
-    public List<Edge> Adj, revAdj; // adjacency list; use LinkedList or
+    public List<Edge> Adj, revAdj; // adjacency list; use MyLinkedList or
     // ArrayList
     public int degree; // indegree in case of directed graph.
     public int index;
+    public HashSet<Edge> AdjHashSet;
 
     /**
      * Constructor for the vertex
@@ -30,6 +32,7 @@ public class Vertex implements Index {
         Adj = new ArrayList<>();
         revAdj = new ArrayList<>(); /* only for directed graphs */
         degree = n == 0 ? -1 : 0;
+        AdjHashSet = new HashSet<>();
     }
 
     /**

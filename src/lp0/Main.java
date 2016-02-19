@@ -13,9 +13,9 @@ public class Main {
     private static Vertex masterSrc;
 
     public static void main(String[] args) {
-        String path = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp0-big.txt"; //took 57758ms 66197ms
-//        String path = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp0-data/tour/lp0-s1-ck.txt";
-//        String path = "edges.txt";
+//        String path = "lp0-big.txt"; //took 57758ms 66197ms
+//        String path = "lp0-s1-ck.txt";
+        String path = "edges.txt";
 
         Graph g = Utility.getGraph(path);
         System.out.println("Graph read");
@@ -27,7 +27,8 @@ public class Main {
         System.out.println(end - start + "ms");
 
 //        g = Utility.getGraph(path);
-//        verifyTour(g, eulerTour.next, masterSrc);
+        eulerTour.next.print();
+        System.out.println(verifyTour(g, eulerTour.next, masterSrc));
     }
 
     static Node findEulerTour(Graph g) {
@@ -48,6 +49,7 @@ public class Main {
             do {
                 if (vertex.degree > 0) {
                     Edge edge = vertex.Adj.get(0);
+                    edge.seen = true;
                     vertex.Adj.remove(0);
                     vertex.degree--;
                     vertex = edge.otherEnd(vertex);
@@ -68,9 +70,25 @@ public class Main {
     }
 
     static boolean verifyTour(Graph g, Node tour, Vertex start) {
-        return false;
+        int countEdges = 0;
+        while (tour != null) {
+            Edge edge = tour.edge;
+            if (edge.seen && checkStartVertex(edge, start)) {
+                countEdges++;
+                edge.seen = false;
+                tour = tour.next;
+                start = edge.otherEnd(start);
+            } else return false;
+        }
+        if (countEdges == numEdges) return true;
+        else return false;
     }
 
+    private static boolean checkStartVertex(Edge edge, Vertex start) {
+        if (start == edge.From || start == edge.To) {
+            return true;
+        } else return false;
+    }
     private static Vertex pickRandomVertex(List<Vertex> verts) {
         if (verts.size() != 1) {
             Random random = new Random();
