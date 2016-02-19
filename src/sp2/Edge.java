@@ -5,7 +5,6 @@ package sp2;
  *
  */
 public class Edge {
-    public Vertex now;
     public boolean seen;
     public Vertex From; // tail vertex
     public Vertex To; // head vertex
@@ -35,6 +34,7 @@ public class Edge {
      * @param u
 	 *            : Vertex
      * @return
+     *            : Vertex at the other end of the edge.
      */
     public Vertex otherEnd(Vertex u) {
         // if the vertex u is the head of the arc, then return the tail else

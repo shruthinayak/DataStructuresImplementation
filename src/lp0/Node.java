@@ -2,13 +2,7 @@ package lp0;
 
 import sp2.Edge;
 
-import java.util.LinkedList;
-import java.util.List;
-
-/**
- * Created by shruthi on 17/2/16.
- */
-public class Node extends LinkedList {
+public class Node {
     public Edge edge;
     public Node next;
     public int size;
@@ -18,15 +12,9 @@ public class Node extends LinkedList {
     }
 
     Node() {
-        size = 0;
 
     }
 
-
-    //    @Override
-    public String toString() {
-        return edge.toString();
-    }
     void print() {
         Node t = this;
         while (t != null) {

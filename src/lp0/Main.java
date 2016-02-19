@@ -7,28 +7,30 @@ import sp2.Vertex;
 
 import java.util.*;
 
+import static java.lang.System.exit;
+
 public class Main {
 
     public static int numEdges;
     private static Vertex masterSrc;
 
     public static void main(String[] args) {
-        String path = "lp0-big.txt"; //took 57758ms 66197ms // now taking only 5059ms
-//        String path = "lp0-s1-ck.txt";
-//        String path = "edges.txt";
+        if (args.length != 1) {
+            System.out.println("Please provide the file path");
+            exit(1);
+        }
 
+        String path = args[0];
         Graph g = Utility.getGraph(path);
-        System.out.println("Graph read");
 
         long start = System.currentTimeMillis();
         Node eulerTour = findEulerTour(g);
         long end = System.currentTimeMillis();
-        System.out.println(eulerTour.size == numEdges);
-        System.out.println(end - start + "ms");
 
-//        g = Utility.getGraph(path);
-//        eulerTour.next.print();
-        System.out.println(verifyTour(g, eulerTour.next, masterSrc));
+        eulerTour.next.print();
+        verifyTour(g, eulerTour.next, masterSrc);
+//        System.out.println("Is it a valid Euler tour? " + verifyTour(eulerTour.next, masterSrc));
+//        System.out.println("Time taken to find the Euler tour : " + (end - start) + "ms");
     }
 
     static Node findEulerTour(Graph g) {
@@ -48,13 +50,10 @@ public class Main {
             Node nextLink = mergeNode.next;
             do {
                 if (vertex.degree > 0) {
-//                    Edge edge = vertex.Adj.get(0);
                     Edge edge = vertex.getNextEdge();
                     edge.seen = true;
-//                    vertex.Adj.remove(0);
                     vertex.degree--;
                     vertex = edge.otherEnd(vertex);
-//                    vertex.Adj.remove(edge);
                     vertex.degree--;
                     mergeNode.next = new Node(edge);
                     mergeNode = mergeNode.next;
@@ -81,15 +80,13 @@ public class Main {
                 start = edge.otherEnd(start);
             } else return false;
         }
-        if (countEdges == numEdges) return true;
-        else return false;
+        return countEdges == numEdges;
     }
 
     private static boolean checkStartVertex(Edge edge, Vertex start) {
-        if (start == edge.From || start == edge.To) {
-            return true;
-        } else return false;
+        return start == edge.From || start == edge.To;
     }
+
     private static Vertex pickRandomVertex(List<Vertex> verts) {
         if (verts.size() != 1) {
             Random random = new Random();
