@@ -111,6 +111,7 @@ public class GraphAlgorithms {
         Vertex randRoot = t.verts.get(num + 1);
         return randRoot;
     }
+
     public static int diameter(Graph t) {
         resetSeen(t);
         Queue<Vertex> verQueue = new LinkedList<Vertex>();
@@ -200,15 +201,15 @@ public class GraphAlgorithms {
             }
         }
         if (checkConnected(g)) {
-            System.out.println("Graph is connected");
+//            System.out.println("Graph is connected");
 
             if (evenVertex.size() == g.numNodes) {
                 System.out.println("Graph is Eulerian");
                 return 0;
             } else if (oddVertex.size() == 2) {
                 // eulerian path exits
-                System.out.println("Graph has an Eulerian Path between vertices "
-                        + oddVertex.get(0) + " and " + oddVertex.get(1));
+//                System.out.println("Graph has an Eulerian Path between vertices "
+//                        + oddVertex.get(0) + " and " + oddVertex.get(1));
                 return 1;
             } else
                 System.out.println("Graph is not Eulerian. It has " + oddVertex.size() + " vertices of odd degree");
@@ -282,7 +283,7 @@ public class GraphAlgorithms {
             System.out.println("Not a Directed Acyclic Graph.");
         } else {
             Collections.reverse(o);
-            System.out.println(o.toString());
+//            System.out.println(o.toString());
         }
         return o;
     }
