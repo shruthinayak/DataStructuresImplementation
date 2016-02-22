@@ -23,6 +23,8 @@ public class Main {
         String path = args[0];
         Graph g = Utility.getGraph(path);
 
+
+        sp2.GraphAlgorithms.testEulerian(g);
         long start = System.currentTimeMillis();
         Node eulerTour = findEulerTour(g);
         long end = System.currentTimeMillis();
@@ -34,11 +36,12 @@ public class Main {
     }
 
     static Node findEulerTour(Graph g) {
+        masterSrc = g.verts.get(1);
         HashMap<Vertex, Node> hm = new HashMap<>();
         Node root = new Node();
         Set<Vertex> q = new LinkedHashSet<>();
 
-        masterSrc = pickRandomVertex(g.verts);
+//        masterSrc = pickRandomVertex(g.verts);
         q.add(masterSrc);
 
         hm.put(masterSrc, root);
@@ -69,6 +72,67 @@ public class Main {
         return root;
     }
 
+
+    static Node findEulerPath(Graph g) {
+        ArrayList<Vertex> oddVertex = new ArrayList();
+        Vertex startVertex = null;
+        Vertex endVertex = null;
+        for (Vertex v : g) {
+            if (v != null) {
+                if (v.degree % 2 != 0) {
+                    if (startVertex == null) {
+                        startVertex = v;
+                    } else if (startVertex.degree >= v.degree) {
+                        endVertex = startVertex;
+                        startVertex = v;
+                    }
+                    oddVertex.add(v);
+                }
+            }
+        }
+        if (startVertex != null) {
+            //check for euler path
+            masterSrc = startVertex;
+            findEulerPath();
+
+        } else { // check for euler tour
+            masterSrc = g.verts.get(1);
+        }
+        HashMap<Vertex, Node> hm = new HashMap<>();
+        Node root = new Node();
+        Set<Vertex> q = new LinkedHashSet<>();
+
+//        masterSrc = pickRandomVertex(g.verts);
+        q.add(masterSrc);
+
+        hm.put(masterSrc, root);
+        while (!q.isEmpty() && root.size != numEdges) {
+            Vertex src = q.iterator().next();
+            q.remove(src);
+            Vertex vertex = src;
+            Node mergeNode = hm.get(vertex);
+            Node nextLink = mergeNode.next;
+            do {
+                if (vertex.degree > 0) {
+                    Edge edge = vertex.getNextEdge();
+                    edge.seen = true;
+                    vertex.degree--;
+                    vertex = edge.otherEnd(vertex);
+                    vertex.degree--;
+                    mergeNode.next = new Node(edge);
+                    mergeNode = mergeNode.next;
+                    root.size++;
+                    hm.put(vertex, mergeNode);
+                    q.add(vertex);
+                } else {
+                    q.remove(vertex);
+                }
+            } while (vertex != src && root.size != numEdges);
+            mergeNode.next = nextLink;
+        }
+        return root;
+
+    }
     static boolean verifyTour(Graph g, Node tour, Vertex start) {
         int countEdges = 0;
         while (tour != null) {
