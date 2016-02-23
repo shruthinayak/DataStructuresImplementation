@@ -1,5 +1,7 @@
 package sp3;
 
+import common.Timer;
+
 /**
  * Created by txb140830 on 2/23/2016.
  */
@@ -7,9 +9,15 @@ public class Main {
     public static void main(String args []){
         int p=999953;
 //        a. Fibonacci numbers computing f_n % p
+        long n = 883;
+        Timer time = new Timer();
 
-        System.out.println(linearFibonacci(7,10));
-        System.out.println(logFibonacci(7,10));
+        time.timer();
+        System.out.println(linearFibonacci(883728292, p));
+        time.timer();
+        time.timer();
+        System.out.println(logFibonacci(883728292, p));
+        time.timer();
     }
 
     public static long linearFibonacci(long n, long p){
@@ -41,7 +49,7 @@ public class Main {
     public static long logFibonacci(long n, long p) {
         if(n==0) return 0;
         long fib[][]= {{1,1},{1,0}};
-        fib=power(fib,n,p);
+        fib = power(fib, n - 1, p);
         return fib[0][0];
     }
     public static long[][] power(long [][] fib, long n, long p){
