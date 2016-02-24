@@ -93,7 +93,6 @@ public class Main {
         if (startVertex != null) {
             //check for euler path
             masterSrc = startVertex;
-            findEulerPath();
 
         } else { // check for euler tour
             masterSrc = g.verts.get(1);
