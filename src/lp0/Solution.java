@@ -9,7 +9,7 @@ import java.util.*;
 
 import static java.lang.System.exit;
 
-public class Main {
+public class Solution {
 
     public static int numEdges;
     private static Vertex masterSrc;

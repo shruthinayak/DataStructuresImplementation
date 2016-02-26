@@ -7,18 +7,22 @@ import sp2.Vertex;
 
 import java.util.*;
 
-public class Main {
+public class Solution {
     Graph g;
 
-    public Main(Graph graph) {
+    public Solution(Graph graph) {
         this.g = graph;
     }
 
     public static void main(String[] args) {
 
-        Main main = new Main(Utility.getGraph("/home/shruthi/AllFiles/OneDrive/Sem4/Impl/sp0pq-big.txt"));
-//        main.indexedHeapExample();
-//        main.binaryHeapExample();
+        Solution main = new Solution(Utility.getGraph("/home/shruthi/AllFiles/OneDrive/Sem4/Impl/sp0pq-big.txt"));
+        System.out.println("Graph read!");
+        /*System.out.println("Indexed Heap example");
+        main.indexedHeapExample();
+        System.out.println("Binary Heap example");
+        main.binaryHeapExample();*/
+
         long start = System.currentTimeMillis();
         System.out.println("MST Weight: " + main.MSTUsingPrims(main.g.verts.get(1)));
         long end = System.currentTimeMillis();

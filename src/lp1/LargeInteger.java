@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public class LargeInteger {
-    final static int B = 1000;
-    final int pow = 3;
+    final static int B = 100;
+    final int pow = 2;
     List<Long> number = new ArrayList<>();
 
     LargeInteger(String s) {
@@ -30,17 +30,21 @@ public class LargeInteger {
     }
 
     static LargeInteger add(LargeInteger a, LargeInteger b) {
-        Iterator aI = a.number.iterator();
-        Iterator bI = b.number.iterator();
+        return add(a.number, b.number);
+    }
+
+    static LargeInteger add(List<Long> a, List<Long> b) {
+        Iterator aI = a.iterator();
+        Iterator bI = b.iterator();
         LargeInteger result = new LargeInteger("");
         long carry = 0;
         while (aI.hasNext() || bI.hasNext()) {
             long x = 0;
             if (aI.hasNext())
-                x = Long.parseLong(aI.next().toString());
+                x = (long) aI.next();
             long y = 0;
             if (bI.hasNext())
-                y = Long.parseLong(bI.next().toString());
+                y = (long) bI.next();
 
             long sum = x + y + carry;
             result.number.add(sum % B);
@@ -49,6 +53,7 @@ public class LargeInteger {
 
         return result;
     }
+
 
     static LargeInteger subtract(LargeInteger a, LargeInteger b) {
         boolean reverse = false;
@@ -89,6 +94,28 @@ public class LargeInteger {
         return result;
     }
 
+    static LargeInteger product(LargeInteger a, LargeInteger b, int start, int end) {
+        //Assuming the lists are of even size and the equal.
+        /*if (start == end) {
+            return new LargeInteger(multiply(a.number.get(start), b.number.get(start)));
+        }
+        int index = (int) Math.ceil((end - start) / 2);
+        LargeInteger a1 = product(a, b, start, index);
+        LargeInteger d1 = product(a, b, index + 1, end);
+        LargeInteger addA = add(a, start, index, );
+        LargeInteger addB = add(b.number.subList(start, index), b.number.subList(index + 1, end));
+        LargeInteger prodAB = product(addA, addB, 0, addA.number.size() - 1);
+        LargeInteger middle = subtract(subtract(prodAB, a1), d1);
+        a1.printList();
+        d1.printList();
+        middle.printList();*/
+        return null;
+    }
+
+    static long multiply(long a, long b) {
+        return a * b;
+    }
+
     @Override
     public String toString() {
         int len = number.size() - 1;
@@ -102,10 +129,6 @@ public class LargeInteger {
                     sb.append(aLong.toString());
         }
         return sb.toString();
-    }
-
-    LargeInteger product(LargeInteger a, LargeInteger b) {
-        return null;
     }
 
     LargeInteger power(LargeInteger a, long n) {

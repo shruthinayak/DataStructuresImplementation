@@ -5,7 +5,7 @@
  */
 package sp2;
 
-import lp0.Main;
+import lp0.Solution;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,7 +35,7 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         // read the graph related parameters
         int n = in.nextInt(); // number of vertices in the graph
         int m = in.nextInt(); // number of edges in the graph
-        Main.numEdges = m;
+        Solution.numEdges = m;
         // create a graph instance
         Graph g = new Graph(n);
         for (int i = 0; i < m; i++) {
