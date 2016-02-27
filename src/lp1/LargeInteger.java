@@ -6,8 +6,9 @@ import java.util.List;
 
 
 public class LargeInteger {
-    final static int B = 100;
-    final int pow = 2;
+    final static int B = 10;
+    final int pow = 1;
+    boolean sign;
 
     List<Long> number;//= new ArrayList<>();
 
@@ -145,25 +146,25 @@ public class LargeInteger {
 
     static LargeInteger product(LargeInteger a, LargeInteger b) {
         //Assuming the lists are of even size and the equal.
-        if (a.number.size() != b.number.size()) {
-            int n = Math.max(a.number.size(), b.number.size());
-            while (a.number.size() != n) {
-                a.number.add((long) 0);
-            }
-            while (b.number.size() != n) {
-                b.number.add((long) 0);
-            }
-        }
+//        if (a.number.size() != b.number.size()) {
+//            int n = Math.max(a.number.size(), b.number.size());
+//            while (a.number.size() != n) {
+//                a.number.add((long) 0);
+//            }
+//            while (b.number.size() != n) {
+//                b.number.add((long) 0);
+//            }
+//        }
         if (a.number.size() == 1 || b.number.size() == 1) {
             return multiply(a, b);
         }
         //number of digits in max(a,b)
-        int n = Math.max(a.number.size(), b.number.size());
+        int n = Math.min(a.number.size(), b.number.size());
 
-        LargeInteger al = new LargeInteger(a, 0, a.number.size() / 2);
-        LargeInteger ar = new LargeInteger(a, a.number.size() / 2, a.number.size());
-        LargeInteger bl = new LargeInteger(b, 0, b.number.size() / 2);
-        LargeInteger br = new LargeInteger(b, b.number.size() / 2, b.number.size());
+        LargeInteger al = new LargeInteger(a, 0, n / 2);
+        LargeInteger ar = new LargeInteger(a, n / 2, a.number.size());
+        LargeInteger bl = new LargeInteger(b, 0, n / 2);
+        LargeInteger br = new LargeInteger(b, n / 2, b.number.size());
         LargeInteger xl = product(al, bl);
         LargeInteger xr = product(ar, br);
         LargeInteger aSum = add(al, ar);
@@ -194,14 +195,26 @@ public class LargeInteger {
         return result;
     }
 
+
+    static LargeInteger power(LargeInteger a, LargeInteger n) {
+        if (n.number.size() == 1) return power(a, n.number.get(0));
+        else {
+            long a0 = n.number.get(0);
+//            LargeInteger n1= new LargeInteger();
+//            n1.number=n.number.subList(1,n.number.size());
+            n.number.remove(0);
+            LargeInteger xtos = power(a, n);
+            return product(power(xtos, B), power(a, a0));
+        }
+    }
+
     @Override
     public String toString() {
         int len = number.size() - 1;
         StringBuilder sb = new StringBuilder();
         for (int i = len; i >= 0; i--) {
             Long aLong = number.get(i);
-//            if (aLong != 0)
-            if (i != len && aLong == 0)
+            if (i != len)
                     sb.append(leadingZeroes(aLong.toString(), pow));
                 else
                     sb.append(aLong.toString());
