@@ -3,12 +3,13 @@ package lp1;
 public class Solution {
     public static void main(String[] args) {
 //        LargeInteger a = new LargeInteger("1234567890123456789012345678901234567890");
-        LargeInteger a = new LargeInteger("712820");
-        LargeInteger b = new LargeInteger("1");
+        LargeInteger a = new LargeInteger("105211212344"); //105211212344
+        LargeInteger b = new LargeInteger("1541232356477");
         LargeInteger c = LargeInteger.add(a, b);
         LargeInteger d = LargeInteger.subtract(c, a);
         LargeInteger e = LargeInteger.product(a, b);
-//        c.printList();
+        LargeInteger f = LargeInteger.power(a, 3);
+        c.printList();
         e.printList();
 //                LargeInteger zero = new LargeInteger(0);
 //                LargeInteger f = LargeInteger.product(a, zero);

@@ -124,19 +124,36 @@ public class LargeInteger {
 
     private static void multiply(LargeInteger a, LargeInteger b, LargeInteger result) {
         Long num1 = a.number.get(0);
+        long carry = 0;
         for (Long num2 : b.number) {
-            Long pro = num1 * num2;
-            if (pro > a.B) {
+            Long pro = num1 * num2 + carry;
+            //if product is greater than base, take carry
+            long temp = pro % B;
+            carry = pro / B;
+            result.number.add(temp);
+            /*if (pro > a.B) {
                 LargeInteger temp = new LargeInteger(pro.toString());
                 result.number.addAll(temp.number);
             } else {
                 result.number.add(pro);
-            }
+            }*/
+        }
+        if (carry != 0) {
+            result.number.add(carry);
         }
     }
 
     static LargeInteger product(LargeInteger a, LargeInteger b) {
         //Assuming the lists are of even size and the equal.
+        if (a.number.size() != b.number.size()) {
+            int n = Math.max(a.number.size(), b.number.size());
+            while (a.number.size() != n) {
+                a.number.add((long) 0);
+            }
+            while (b.number.size() != n) {
+                b.number.add((long) 0);
+            }
+        }
         if (a.number.size() == 1 || b.number.size() == 1) {
             return multiply(a, b);
         }
@@ -157,6 +174,7 @@ public class LargeInteger {
         for (int i = 0; i < n / 2; i++) {
             middle.number.add(0, (long) 0);
         }
+        if (n % 2 != 0) n--;
         for (int i = 0; i < n; i++) {
             xr.number.add(0, (long) 0);
         }
@@ -165,23 +183,30 @@ public class LargeInteger {
 
     }
 
+    static LargeInteger power(LargeInteger a, long n) {
+        if (n == 0) return new LargeInteger((long) 1);
+        if (n == 1) return a;
+        LargeInteger result = power(a, n / 2);
+        result = product(result, result);
+        if (n % 2 != 0) {
+            result = product(result, a);
+        }
+        return result;
+    }
+
     @Override
     public String toString() {
         int len = number.size() - 1;
         StringBuilder sb = new StringBuilder();
         for (int i = len; i >= 0; i--) {
             Long aLong = number.get(i);
-            if (aLong != 0)
-                if (i != len)
+//            if (aLong != 0)
+            if (i != len && aLong == 0)
                     sb.append(leadingZeroes(aLong.toString(), pow));
                 else
                     sb.append(aLong.toString());
         }
         return sb.toString();
-    }
-
-    LargeInteger power(LargeInteger a, long n) {
-        return null;
     }
 
     void printList() {
