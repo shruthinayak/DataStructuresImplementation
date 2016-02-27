@@ -7,13 +7,16 @@ public class HashList<T> {
     int tableSize;
     int k;
     T[] hashTable;
+    int[] count;
 
     HashList(int tableSize) {
         this.tableSize = tableSize;
         k = 0;
         hashTable = (T[]) new Object[tableSize];
+        count = new int[tableSize];
         for (int i = 0; i < tableSize; i++) {
             hashTable[i] = null;
+            count[i] = 0;
         }
     }
 
@@ -26,8 +29,11 @@ public class HashList<T> {
     void insert(T[] a, T obj, int i) {
         if (!find(obj)) {
             hashTable[hashFunction(obj)] = obj;
+            count[hashFunction(obj)] = 1;
             swap(a, k, i);
             k++;
+        } else {
+            count[hashFunction(obj)]++;
         }
 
     }
@@ -48,6 +54,13 @@ public class HashList<T> {
         if (find(obj)) {
             a[hashFunction(obj)] = null;
         }
+    }
+
+    int elementFreq(T obj) {
+        if (find(obj)) {
+            return count[hashFunction(obj)];
+        }
+        return -1;
     }
 
 }
