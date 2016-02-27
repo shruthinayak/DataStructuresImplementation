@@ -1,16 +1,24 @@
 package lp1;
 
+import common.Timer;
+
 public class Solution {
     public static void main(String[] args) {
 //        LargeInteger a = new LargeInteger("1234567890123456789012345678901234567890");
-        LargeInteger a = new LargeInteger("105211212344"); //105211212344
-        LargeInteger b = new LargeInteger("1541232356477");
-        LargeInteger c = LargeInteger.add(a, b);
-        LargeInteger d = LargeInteger.subtract(c, a);
-        LargeInteger e = LargeInteger.product(a, b);
-        LargeInteger f = LargeInteger.power(a, 3);
-        c.printList();
-        e.printList();
+        LargeInteger a = new LargeInteger("100"); //105211212344//90569784495866770974195656280275310090138980613960953881501965823101
+        LargeInteger b = new LargeInteger("120");//1541232356477
+//        LargeInteger c = LargeInteger.add(a, b);
+//        LargeInteger d = LargeInteger.subtract(c, a);
+        Timer time = new Timer();
+        time.timer();
+        LargeInteger f = LargeInteger.power(a, 10000);
+
+//        LargeInteger e = LargeInteger.product(a, b);
+        time.timer();
+//        LargeInteger g= LargeInteger.power(a,b); //00000000000000000000000000000000000000000000162889462677744140625
+//        c.printList();
+//        e.printList();
+        f.printList();
 //                LargeInteger zero = new LargeInteger(0);
 //                LargeInteger f = LargeInteger.product(a, zero);
 //                LargeInteger two = new LargeInteger(2);
