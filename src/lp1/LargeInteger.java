@@ -8,8 +8,12 @@ import java.util.List;
 public class LargeInteger {
     final static int B = 100;
     final int pow = 2;
+
     List<Long> number = new ArrayList<>();
 
+    LargeInteger() {
+        this.number = new ArrayList<>();
+    }
     LargeInteger(String s) {
         int len = s.length() - pow;
         int i;
@@ -21,13 +25,13 @@ public class LargeInteger {
             number.add(Long.parseLong(s.substring(0, i + pow)));
     }
 
+    LargeInteger(LargeInteger x, int start, int end) {
+        this.number = x.number.subList(start, end);
+    }
     LargeInteger(Long num) {
         this(String.valueOf(num));
     }
 
-    public LargeInteger() {
-        this.number = new ArrayList<>();
-    }
 
     static String leadingZeroes(String s, int pow) {
         return String.format(String.format("%%0%dd", pow), Long.parseLong(s));
@@ -100,26 +104,57 @@ public class LargeInteger {
         return result;
     }
 
-    static LargeInteger product(LargeInteger a, LargeInteger b, int start, int end) {
-        //Assuming the lists are of even size and the equal.
-        /*if (start == end) {
-            return new LargeInteger(multiply(a.number.get(start), b.number.get(start)));
+    static LargeInteger multiply(LargeInteger a, LargeInteger b) {
+        if (a.number.size() == 1 && b.number.size() == 1) {
+            return new LargeInteger(a.number.get(0) * b.number.get(0));
+        } else {
+            boolean flag = a.number.size() == 1 ? true : false;
+            LargeInteger result = new LargeInteger();
+            if (flag) {
+                Long num1 = a.number.get(0);
+                for (Long num2 : b.number) {
+                    Long pro = num1 * num2;
+                    if (pro > a.B) {
+                        LargeInteger temp = new LargeInteger(pro.toString());
+                        result.number.addAll(temp.number);
+                    } else {
+                        result.number.add(pro);
+                    }
+                }
+            }
+            return result;
         }
-        int index = (int) Math.ceil((end - start) / 2);
-        LargeInteger a1 = product(a, b, start, index);
-        LargeInteger d1 = product(a, b, index + 1, end);
-        LargeInteger addA = add(a, start, index, );
-        LargeInteger addB = add(b.number.subList(start, index), b.number.subList(index + 1, end));
-        LargeInteger prodAB = product(addA, addB, 0, addA.number.size() - 1);
-        LargeInteger middle = subtract(subtract(prodAB, a1), d1);
-        a1.printList();
-        d1.printList();
-        middle.printList();*/
-        return null;
+
     }
 
-    static long multiply(long a, long b) {
-        return a * b;
+    static LargeInteger product(LargeInteger a, LargeInteger b) {
+        //Assuming the lists are of even size and the equal.
+        if (a.number.size() == 1 || b.number.size() == 1) {
+            return multiply(a, b);
+        }
+        //number of digits in max(a,b)
+        int n = Math.max(a.number.size(), b.number.size());
+
+        LargeInteger al = new LargeInteger(a, 0, a.number.size() / 2);
+        LargeInteger ar = new LargeInteger(a, a.number.size() / 2, a.number.size());
+        LargeInteger bl = new LargeInteger(b, 0, b.number.size() / 2);
+        LargeInteger br = new LargeInteger(b, b.number.size() / 2, b.number.size());
+        LargeInteger xl = product(al, bl);
+        LargeInteger xr = product(ar, br);
+        LargeInteger aSum = add(al, ar);
+        LargeInteger bSum = add(bl, br);
+        LargeInteger xm = product(aSum, bSum);
+
+        LargeInteger middle = subtract(subtract(xm, xl), xr);
+        for (int i = 0; i < n / 2; i++) {
+            middle.number.add(0, (long) 0);
+        }
+        for (int i = 0; i < n; i++) {
+            xr.number.add(0, (long) 0);
+        }
+        LargeInteger result = add(add(xl, middle), xr);
+        return result;
+
     }
 
     @Override
