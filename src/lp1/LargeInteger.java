@@ -25,6 +25,10 @@ public class LargeInteger {
         this(String.valueOf(num));
     }
 
+    public LargeInteger() {
+        this.number = new ArrayList<>();
+    }
+
     static String leadingZeroes(String s, int pow) {
         return String.format(String.format("%%0%dd", pow), Long.parseLong(s));
     }
@@ -36,7 +40,7 @@ public class LargeInteger {
     static LargeInteger add(List<Long> a, List<Long> b) {
         Iterator aI = a.iterator();
         Iterator bI = b.iterator();
-        LargeInteger result = new LargeInteger("");
+        LargeInteger result = new LargeInteger();
         long carry = 0;
         while (aI.hasNext() || bI.hasNext()) {
             long x = 0;
@@ -50,7 +54,9 @@ public class LargeInteger {
             result.number.add(sum % B);
             carry = sum / B;
         }
-
+        if (carry > 0) {
+            result.number.add(0, carry);
+        }
         return result;
     }
 
