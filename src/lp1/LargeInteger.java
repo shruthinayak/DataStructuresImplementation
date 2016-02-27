@@ -55,7 +55,7 @@ public class LargeInteger {
             carry = sum / B;
         }
         if (carry > 0) {
-            result.number.add(0, carry);
+            result.number.add(carry);
         }
         return result;
     }
