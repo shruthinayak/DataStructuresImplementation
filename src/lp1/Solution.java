@@ -5,7 +5,7 @@ import common.Timer;
 public class Solution {
     public static void main(String[] args) {
 //        LargeInteger a = new LargeInteger("1234567890123456789012345678901234567890");
-        LargeInteger a = new LargeInteger("100"); //105211212344//90569784495866770974195656280275310090138980613960953881501965823101
+        LargeInteger a = new LargeInteger("100000"); //105211212344//90569784495866770974195656280275310090138980613960953881501965823101
         LargeInteger b = new LargeInteger("120");//1541232356477
 //        LargeInteger c = LargeInteger.add(a, b);
 //        LargeInteger d = LargeInteger.subtract(c, a);

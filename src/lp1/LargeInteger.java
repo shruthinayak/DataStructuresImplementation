@@ -10,7 +10,7 @@ public class LargeInteger {
     final int pow = 1;
     boolean sign;
 
-    List<Long> number;//= new ArrayList<>();
+    List<Long> number;
 
     LargeInteger() {
         this.number = new ArrayList<>();
@@ -28,7 +28,6 @@ public class LargeInteger {
     }
 
     LargeInteger(LargeInteger x, int start, int end) {
-//        this.number = new ArrayList<>();
         this.number = x.number.subList(start, end);
     }
     LargeInteger(Long num) {
@@ -132,12 +131,6 @@ public class LargeInteger {
             long temp = pro % B;
             carry = pro / B;
             result.number.add(temp);
-            /*if (pro > a.B) {
-                LargeInteger temp = new LargeInteger(pro.toString());
-                result.number.addAll(temp.number);
-            } else {
-                result.number.add(pro);
-            }*/
         }
         if (carry != 0) {
             result.number.add(carry);
@@ -145,16 +138,6 @@ public class LargeInteger {
     }
 
     static LargeInteger product(LargeInteger a, LargeInteger b) {
-        //Assuming the lists are of even size and the equal.
-//        if (a.number.size() != b.number.size()) {
-//            int n = Math.max(a.number.size(), b.number.size());
-//            while (a.number.size() != n) {
-//                a.number.add((long) 0);
-//            }
-//            while (b.number.size() != n) {
-//                b.number.add((long) 0);
-//            }
-//        }
         if (a.number.size() == 1 || b.number.size() == 1) {
             return multiply(a, b);
         }
@@ -200,8 +183,6 @@ public class LargeInteger {
         if (n.number.size() == 1) return power(a, n.number.get(0));
         else {
             long a0 = n.number.get(0);
-//            LargeInteger n1= new LargeInteger();
-//            n1.number=n.number.subList(1,n.number.size());
             n.number.remove(0);
             LargeInteger xtos = power(a, n);
             return product(power(xtos, B), power(a, a0));
