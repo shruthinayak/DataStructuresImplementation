@@ -1,17 +1,14 @@
 package sp0h;
 
+import com.intellij.util.ArrayUtil;
+
+import java.util.Arrays;
 import java.util.Random;
 
 public class Solution<T> {
     static Solution s = new Solution();
 
     public static void main(String[] args) {
-        s.removingDuplicates();
-
-    }
-
-    public void removingDuplicates() {
-
         Object[] x;
         boolean object = false;
         if (object) {
@@ -26,7 +23,8 @@ public class Solution<T> {
                     new Support(3, 5, "P")
             };
         } else {
-            int len = 1000000;
+            //Generating random numbers
+            int len = 10000000;
             x = new Object[len];
             Random rand = new Random();
             int i = 0;
@@ -35,6 +33,13 @@ public class Solution<T> {
                 i++;
             }
         }
+        s.removingDuplicates(x);
+        s.mostFrequent(x);
+
+
+    }
+
+    public void removingDuplicates(T[] x) {
         long start = System.currentTimeMillis();
         int k = s.findDistinct(x);
         long end = System.currentTimeMillis();
@@ -50,7 +55,65 @@ public class Solution<T> {
         for (int i = 0; i < arr.length; i++) {
             g.insert(arr, arr[i], i);
         }
-
         return g.k;
+    }
+
+    public int mostFrequent(T[] arr) {
+        mostFreqWithSort(arr);
+        return mostFreqWithHashMap(arr);
+    }
+
+    private int mostFreqWithHashMap(T[] arr) {
+        long start;
+        int max;
+        long end;
+
+        Integer[] x = ArrayUtil.toObjectArray(Integer.class, arr);
+        start = System.currentTimeMillis();
+        HashList<Integer> g = new HashList<>(arr.length);
+        max = -1;
+        int e = 0;
+        for (int i = 0; i < arr.length; i++) {
+            g.insert(x, x[i], i);
+            if (g.elementFreq(x[i]) > max) {
+                max = g.elementFreq(x[i]);
+                e = x[i];
+            }
+        }
+        end = System.currentTimeMillis();
+        System.out.println("HashMap impl  - " + (end - start) + "ms");
+        System.out.println(e + ":" + max);
+        return max;
+    }
+
+    private void mostFreqWithSort(T[] arr) {
+        T[] cpy = arr.clone();
+        long start = System.currentTimeMillis();
+
+        Arrays.sort(cpy);
+
+        T previous = cpy[0];
+        T popular = cpy[0];
+        int count = 1;
+        int maxCount = 1;
+
+        for (int i = 1; i < cpy.length; i++) {
+            if (cpy[i].equals(previous))
+                count++;
+            else {
+                if (count > maxCount) {
+                    popular = cpy[i - 1];
+                    maxCount = count;
+                }
+                previous = cpy[i];
+                count = 1;
+            }
+        }
+
+        popular = count > maxCount ? cpy[cpy.length - 1] : popular;
+        maxCount = count > maxCount ? count : maxCount;
+        long end = System.currentTimeMillis();
+        System.out.println("Arrays.sort()  - " + (end - start) + "ms");
+        System.out.println(popular + ":" + maxCount);
     }
 }
