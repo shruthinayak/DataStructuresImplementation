@@ -6,10 +6,10 @@ public class Solution {
         LargeInteger a = new LargeInteger("712820");
         LargeInteger b = new LargeInteger("1");
         LargeInteger c = LargeInteger.add(a, b);
-        c.printList();
         LargeInteger d = LargeInteger.subtract(c, a);
-        LargeInteger e = LargeInteger.product(a, b, 0, a.number.size() - 1);
-//        e.printList();
+        LargeInteger e = LargeInteger.product(a, b);
+//        c.printList();
+        e.printList();
 //                LargeInteger zero = new LargeInteger(0);
 //                LargeInteger f = LargeInteger.product(a, zero);
 //                LargeInteger two = new LargeInteger(2);
