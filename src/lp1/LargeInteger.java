@@ -9,12 +9,13 @@ public class LargeInteger {
     final static int B = 100;
     final int pow = 2;
 
-    List<Long> number = new ArrayList<>();
+    List<Long> number;//= new ArrayList<>();
 
     LargeInteger() {
         this.number = new ArrayList<>();
     }
     LargeInteger(String s) {
+        this.number = new ArrayList<>();
         int len = s.length() - pow;
         int i;
         for (i = len; i > -1; i -= pow) {
@@ -26,6 +27,7 @@ public class LargeInteger {
     }
 
     LargeInteger(LargeInteger x, int start, int end) {
+//        this.number = new ArrayList<>();
         this.number = x.number.subList(start, end);
     }
     LargeInteger(Long num) {
@@ -111,20 +113,26 @@ public class LargeInteger {
             boolean flag = a.number.size() == 1 ? true : false;
             LargeInteger result = new LargeInteger();
             if (flag) {
-                Long num1 = a.number.get(0);
-                for (Long num2 : b.number) {
-                    Long pro = num1 * num2;
-                    if (pro > a.B) {
-                        LargeInteger temp = new LargeInteger(pro.toString());
-                        result.number.addAll(temp.number);
-                    } else {
-                        result.number.add(pro);
-                    }
-                }
+                multiply(a, b, result);
+            } else {
+                multiply(b, a, result);
             }
             return result;
         }
 
+    }
+
+    private static void multiply(LargeInteger a, LargeInteger b, LargeInteger result) {
+        Long num1 = a.number.get(0);
+        for (Long num2 : b.number) {
+            Long pro = num1 * num2;
+            if (pro > a.B) {
+                LargeInteger temp = new LargeInteger(pro.toString());
+                result.number.addAll(temp.number);
+            } else {
+                result.number.add(pro);
+            }
+        }
     }
 
     static LargeInteger product(LargeInteger a, LargeInteger b) {
