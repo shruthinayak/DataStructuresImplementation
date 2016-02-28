@@ -1,7 +1,6 @@
 package lp1;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -77,6 +76,7 @@ public class LargeInteger {
     static LargeInteger subtract(LargeInteger a, LargeInteger b) {
         b.positive = !b.positive;//314, -625
         LargeInteger i = decideAddSubtract(a, b);
+
         b.positive = !b.positive;
         return i;
     }
@@ -99,8 +99,17 @@ public class LargeInteger {
         int curr = 0, count = 0;
         if (b.size() > a.size()) {
             reverse = true;
-        } else if (b.size() == a.size() && b.get(b.size() - 1) > a.get(a.size() - 1)) {
-            reverse = true;
+        } else if (b.size() == a.size()) {
+            int len = b.size();
+            do {
+                if (b.get(len - 1) > a.get(len - 1)) {
+                    reverse = true;
+                    break;
+                } else if (b.get(len - 1) < a.get(len - 1)) {
+                    break;
+                }
+                len--;
+            } while (len > 0);
         }
         Iterator aI = a.iterator();
         Iterator bI = b.iterator();
@@ -132,21 +141,29 @@ public class LargeInteger {
         }
 
         while (curr < count - 1) {
-            result.number.remove(curr);
+            result.number.remove(curr + 1);
             count--;
         }
+
         return result;
     }
 
 
     static boolean getSign(LargeInteger a, LargeInteger b) {
         //is b>a?
+
         if (b.number.size() > a.number.size()) {
             return b.positive;
         } else if (b.number.size() == a.number.size()) {
-            long n1 = b.number.get(b.number.size() - 1);
-            long n2 = a.number.get(a.number.size() - 1);
-            return n1 > n2 ? b.positive : a.positive;
+            int len = b.number.size();
+            do {
+                if (b.number.get(len - 1) > a.number.get(len - 1)) {
+                    return b.positive;
+                } else if (b.number.get(len - 1) < a.number.get(len - 1)) {
+                    return a.positive;
+                }
+                len--;
+            } while (len > 0);
         }
         return a.positive;
 
@@ -184,16 +201,7 @@ public class LargeInteger {
     }
 
     static LargeInteger product(LargeInteger a, LargeInteger b) {
-        //Assuming the lists are of even size and the equal.
-//        if (a.number.size() != b.number.size()) {
-//            int n = Math.max(a.number.size(), b.number.size());
-//            while (a.number.size() != n) {
-//                a.number.add((long) 0);
-//            }
-//            while (b.number.size() != n) {
-//                b.number.add((long) 0);
-//            }
-//        }
+
         if (a.number.size() == 1 || b.number.size() == 1) {
             return multiply(a, b);
         }
@@ -247,21 +255,18 @@ public class LargeInteger {
 
     // divide a/b
     static LargeInteger divide(LargeInteger a, LargeInteger b) {
-        //throw the exception for b is zero
-        /*LargeInteger counter = new LargeInteger(0L);
-        while (compare(a, new LargeInteger((long) 0)) > 0) {
-            counter = add(counter, new LargeInteger(1L));
-            a = subtract(a, b);
-        }
-        return counter;*/
+
         LargeInteger low = new LargeInteger((long) 1);
         LargeInteger high = a;
         if (compare(a, b) == -1) {
             return new LargeInteger(0L);
         }
+        if (b.toString().equals("1")) {
+            return a;
+        }
         while (compare(add(low, new LargeInteger(1L)), high) == -1) {
             LargeInteger mid = divideByN(add(low, high));
-            LargeInteger powMid = multiply(mid, b);
+            LargeInteger powMid = product(mid, b);
             if (compare(powMid, a) == 1) {
                 high = mid;
             } else if (compare(powMid, a) == -1) {
@@ -286,8 +291,9 @@ public class LargeInteger {
         return result;
     }
 
-    public static int compare(LargeInteger o1, LargeInteger o2) {
-        LargeInteger temp = subtract(o1, o2);
+    public static int compare(LargeInteger a, LargeInteger b) {
+
+        LargeInteger temp = subtract(a, b);
         // have to compare the number greater than 0
         if (temp.toString().equals("0"))
             return 0;
@@ -296,6 +302,7 @@ public class LargeInteger {
         } else {
             return -1;
         }
+
     }
 
     LargeInteger mod(LargeInteger a, LargeInteger b) {
@@ -331,14 +338,11 @@ public class LargeInteger {
             if (!zero)
                 sb.append(leadingZeroes(aLong.toString(), pow));
             else {
-                if (aLong == 0) {
-                    zero = true;
-                } else {
-                    sb.append(aLong.toString());
-                    zero = false;
-                }
-
+                sb.append(aLong.toString());
+                zero = false;
             }
+
+
         }
         if (sb.toString().length() == 0) {
             sb.append("0");
