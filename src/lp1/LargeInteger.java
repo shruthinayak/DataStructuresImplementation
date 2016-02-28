@@ -6,16 +6,22 @@ import java.util.List;
 
 
 public class LargeInteger {
-    final static int B = 10;
-    final int pow = 1;
-    boolean sign;
+    final static int B = 100;
+    final int pow = 2;
+    boolean positive = true;
 
     List<Long> number;
 
     LargeInteger() {
         this.number = new ArrayList<>();
     }
+
     LargeInteger(String s) {
+        if (s.startsWith("-")) {
+            positive = false;
+            s = s.substring(1);
+        }
+
         this.number = new ArrayList<>();
         int len = s.length() - pow;
         int i;
@@ -30,6 +36,7 @@ public class LargeInteger {
     LargeInteger(LargeInteger x, int start, int end) {
         this.number = x.number.subList(start, end);
     }
+
     LargeInteger(Long num) {
         this(String.valueOf(num));
     }
@@ -40,7 +47,7 @@ public class LargeInteger {
     }
 
     static LargeInteger add(LargeInteger a, LargeInteger b) {
-        return add(a.number, b.number);
+        return decideAddSubtract(a, b);
     }
 
     static LargeInteger add(List<Long> a, List<Long> b) {
@@ -66,16 +73,35 @@ public class LargeInteger {
         return result;
     }
 
-
     static LargeInteger subtract(LargeInteger a, LargeInteger b) {
+        b.positive = !b.positive;
+        LargeInteger i = decideAddSubtract(a, b);
+        b.positive = !b.positive;
+        return i;
+    }
+
+    private static LargeInteger decideAddSubtract(LargeInteger a, LargeInteger b) {
+        LargeInteger result;
+        if (a.positive == b.positive) {
+            result = add(a.number, b.number);
+            result.positive = a.positive;
+        } else {
+            result = subtract(a.number, b.number);
+            result.positive = getSign(a, b);
+        }
+        return result;
+    }
+
+    static LargeInteger subtract(List<Long> a, List<Long> b) {
         boolean reverse = false;
-        if (b.number.size() > a.number.size()) {
+
+        if (b.size() > a.size()) {
             reverse = true;
-        } else if (b.number.size() == a.number.size() && b.number.get(b.number.size() - 1) > a.number.get(a.number.size() - 1)) {
+        } else if (b.size() == a.size() && b.get(b.size() - 1) > a.get(a.size() - 1)) {
             reverse = true;
         }
-        Iterator aI = a.number.iterator();
-        Iterator bI = b.number.iterator();
+        Iterator aI = a.iterator();
+        Iterator bI = b.iterator();
         LargeInteger result = new LargeInteger("");
         long borrow = 0;
         while (aI.hasNext() || bI.hasNext()) {
@@ -98,12 +124,20 @@ public class LargeInteger {
                 borrow = 0;
             result.number.add(diff);
         }
-        if (reverse) {
-            int index = result.number.size() - 1;
-            result.number.add(index, 0 - result.number.get(index));
-        }
-
         return result;
+    }
+
+    static boolean getSign(LargeInteger a, LargeInteger b) {
+        //is b>a?
+        if (b.number.size() > a.number.size()) {
+            return b.positive;
+        } else if (b.number.size() == a.number.size()) {
+            long n1 = b.number.get(b.number.size() - 1);
+            long n2 = a.number.get(a.number.size() - 1);
+            return n1 > n2 ? b.positive : a.positive;
+        }
+        return a.positive;
+
     }
 
     static LargeInteger multiply(LargeInteger a, LargeInteger b) {
@@ -193,12 +227,15 @@ public class LargeInteger {
     public String toString() {
         int len = number.size() - 1;
         StringBuilder sb = new StringBuilder();
+        if (!positive) {
+            sb.append("-");
+        }
         for (int i = len; i >= 0; i--) {
             Long aLong = number.get(i);
             if (i != len)
-                    sb.append(leadingZeroes(aLong.toString(), pow));
-                else
-                    sb.append(aLong.toString());
+                sb.append(leadingZeroes(aLong.toString(), pow));
+            else
+                sb.append(aLong != 0 ? aLong.toString() : "");
         }
         return sb.toString();
     }
