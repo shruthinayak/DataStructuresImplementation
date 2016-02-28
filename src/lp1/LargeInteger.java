@@ -271,8 +271,11 @@ public class LargeInteger {
         }
     }
 
-    // divide a/b
     static LargeInteger divide(LargeInteger a, LargeInteger b) {
+        return divideMod(a, b, true);
+    }
+    // divide a/b
+    static LargeInteger divideMod(LargeInteger a, LargeInteger b, boolean divide) {
         boolean aSign = a.positive;
         boolean bSign = b.positive;
         if (b.toString().equals("0")) {
@@ -294,10 +297,12 @@ public class LargeInteger {
             b.positive = bSign;
             return new LargeInteger(a, 0, a.number.size(), pos);
         }
-
+        LargeInteger prevPowMid = null;
+        LargeInteger powMid = null;
         while (compare(add(low, new LargeInteger(1L)), high) == -1) {
             LargeInteger mid = divideByN(add(low, high));
-            LargeInteger powMid = product1(mid, b);
+            prevPowMid = powMid;
+            powMid = product1(mid, b);
             if (compare(powMid, a) == 1) {
                 high = mid;
             } else if (compare(powMid, a) == -1) {
@@ -306,14 +311,19 @@ public class LargeInteger {
                 mid.positive = pos;
                 a.positive = aSign;
                 b.positive = bSign;
-                return mid;
+                //powMid.printList();
+                if (divide) return mid;
+                else return subtract(powMid, a);
             }
         }
-
+        if (compare(powMid, a) == -1) {
+            prevPowMid = powMid;
+        }
         a.positive = aSign;
         b.positive = bSign;
         low.positive = pos;
-        return low;
+        if (divide) return low;
+        else return subtract(a, prevPowMid);
     }
 
 
@@ -366,8 +376,12 @@ public class LargeInteger {
         return low;
     }
 
-    LargeInteger mod(LargeInteger a, LargeInteger b) {
-        return null;
+    static LargeInteger mod(LargeInteger a, LargeInteger b) {
+        if (a.positive && b.positive) {
+            return divideMod(a, b, false);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
