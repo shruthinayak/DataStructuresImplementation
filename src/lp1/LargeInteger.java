@@ -230,12 +230,23 @@ public class LargeInteger {
         if (!positive) {
             sb.append("-");
         }
+        boolean zero = true; //Never add leading zeroes at the beginning. Hence always "True" for the first time.
         for (int i = len; i >= 0; i--) {
             Long aLong = number.get(i);
-            if (i != len)
+            if (!zero)
                 sb.append(leadingZeroes(aLong.toString(), pow));
-            else
-                sb.append(aLong != 0 ? aLong.toString() : "");
+            else {
+                if (aLong == 0) {
+                    zero = true;
+                } else {
+                    sb.append(aLong.toString());
+                    zero = false;
+                }
+
+            }
+        }
+        if (sb.toString().length() == 0) {
+            sb.append("0");
         }
         return sb.toString();
     }
