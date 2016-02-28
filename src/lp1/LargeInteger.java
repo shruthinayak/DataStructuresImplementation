@@ -1,6 +1,7 @@
 package lp1;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class LargeInteger {
     }
 
     static LargeInteger subtract(LargeInteger a, LargeInteger b) {
-        b.positive = !b.positive;
+        b.positive = !b.positive;//314, -625
         LargeInteger i = decideAddSubtract(a, b);
         b.positive = !b.positive;
         return i;
@@ -94,7 +95,8 @@ public class LargeInteger {
 
     static LargeInteger subtract(List<Long> a, List<Long> b) {
         boolean reverse = false;
-
+        int zero = 0;
+        int curr = 0, count = 0;
         if (b.size() > a.size()) {
             reverse = true;
         } else if (b.size() == a.size() && b.get(b.size() - 1) > a.get(a.size() - 1)) {
@@ -122,10 +124,20 @@ public class LargeInteger {
                 borrow = 1;
             } else
                 borrow = 0;
+            if (diff > 0) {
+                curr = count;
+            }
+            count++;
             result.number.add(diff);
+        }
+
+        while (curr < count - 1) {
+            result.number.remove(curr);
+            count--;
         }
         return result;
     }
+
 
     static boolean getSign(LargeInteger a, LargeInteger b) {
         //is b>a?
@@ -172,6 +184,16 @@ public class LargeInteger {
     }
 
     static LargeInteger product(LargeInteger a, LargeInteger b) {
+        //Assuming the lists are of even size and the equal.
+//        if (a.number.size() != b.number.size()) {
+//            int n = Math.max(a.number.size(), b.number.size());
+//            while (a.number.size() != n) {
+//                a.number.add((long) 0);
+//            }
+//            while (b.number.size() != n) {
+//                b.number.add((long) 0);
+//            }
+//        }
         if (a.number.size() == 1 || b.number.size() == 1) {
             return multiply(a, b);
         }
@@ -221,6 +243,79 @@ public class LargeInteger {
             LargeInteger xtos = power(a, n);
             return product(power(xtos, B), power(a, a0));
         }
+    }
+
+    // divide a/b
+    static LargeInteger divide(LargeInteger a, LargeInteger b) {
+        //throw the exception for b is zero
+        /*LargeInteger counter = new LargeInteger(0L);
+        while (compare(a, new LargeInteger((long) 0)) > 0) {
+            counter = add(counter, new LargeInteger(1L));
+            a = subtract(a, b);
+        }
+        return counter;*/
+        LargeInteger low = new LargeInteger((long) 1);
+        LargeInteger high = a;
+        if (compare(a, b) == -1) {
+            return new LargeInteger(0L);
+        }
+        while (compare(add(low, new LargeInteger(1L)), high) == -1) {
+            LargeInteger mid = divideByN(add(low, high));
+            LargeInteger powMid = multiply(mid, b);
+            if (compare(powMid, a) == 1) {
+                high = mid;
+            } else if (compare(powMid, a) == -1) {
+                low = mid;
+            } else return mid;
+        }
+        return low;
+    }
+
+    static LargeInteger divideByN(LargeInteger a) {
+        LargeInteger result = new LargeInteger();
+        long carry = 0;
+        long n;
+        for (int i = a.number.size() - 1; i >= 0; i--) {
+            n = ((carry * B) + a.number.get(i)) / 2;
+            carry = a.number.get(i) % 2;
+            result.number.add(0, n);
+        }
+        while (result.number.get(result.number.size() - 1) == 0) {
+            result.number.remove(result.number.size() - 1);
+        }
+        return result;
+    }
+
+    public static int compare(LargeInteger o1, LargeInteger o2) {
+        LargeInteger temp = subtract(o1, o2);
+        // have to compare the number greater than 0
+        if (temp.toString().equals("0"))
+            return 0;
+        if (temp.positive) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    LargeInteger mod(LargeInteger a, LargeInteger b) {
+        return null;
+    }
+
+    LargeInteger squareRoot(LargeInteger a) {
+
+        LargeInteger low = new LargeInteger((long) 1);
+        LargeInteger high = a;
+        while (compare(add(low, new LargeInteger(1L)), high) == -1) {
+            LargeInteger mid = divide(add(low, high), new LargeInteger(2L));
+            LargeInteger powMid = power(mid, 2);
+            if (compare(powMid, a) == 1) {
+                high = mid;
+            } else if (compare(powMid, a) == -1) {
+                low = mid;
+            } else return mid;
+        }
+        return low;
     }
 
     @Override
