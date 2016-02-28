@@ -37,6 +37,10 @@ public class LargeInteger {
         this.number = x.number.subList(start, end);
     }
 
+    LargeInteger(LargeInteger x, int start, int end, boolean sign) {
+        this.number = x.number.subList(start, end);
+        this.positive = sign;
+    }
     LargeInteger(Long num) {
         this(String.valueOf(num));
     }
@@ -255,15 +259,28 @@ public class LargeInteger {
 
     // divide a/b
     static LargeInteger divide(LargeInteger a, LargeInteger b) {
-
+        boolean aSign = a.positive;
+        boolean bSign = b.positive;
+        if (b.toString().equals("0")) {
+            throw new IllegalArgumentException();
+        }
+        boolean pos = a.positive == b.positive;
         LargeInteger low = new LargeInteger((long) 1);
         LargeInteger high = a;
+        a.positive = true;
+        b.positive = true;
+
         if (compare(a, b) == -1) {
+            a.positive = aSign;
+            b.positive = bSign;
             return new LargeInteger(0L);
         }
-        if (b.toString().equals("1")) {
-            return a;
+        if (b.toString().equals("1") || b.toString().equals("-1")) {
+            a.positive = aSign;
+            b.positive = bSign;
+            return new LargeInteger(a, 0, a.number.size(), pos);
         }
+
         while (compare(add(low, new LargeInteger(1L)), high) == -1) {
             LargeInteger mid = divideByN(add(low, high));
             LargeInteger powMid = product(mid, b);
@@ -271,10 +288,20 @@ public class LargeInteger {
                 high = mid;
             } else if (compare(powMid, a) == -1) {
                 low = mid;
-            } else return mid;
+            } else {
+                mid.positive = pos;
+                a.positive = aSign;
+                b.positive = bSign;
+                return mid;
+            }
         }
+
+        a.positive = aSign;
+        b.positive = bSign;
+        low.positive = pos;
         return low;
     }
+
 
     static LargeInteger divideByN(LargeInteger a) {
         LargeInteger result = new LargeInteger();
@@ -305,14 +332,14 @@ public class LargeInteger {
 
     }
 
-    LargeInteger mod(LargeInteger a, LargeInteger b) {
-        return null;
-    }
-
-    LargeInteger squareRoot(LargeInteger a) {
+    static LargeInteger squareRoot(LargeInteger a) {
 
         LargeInteger low = new LargeInteger((long) 1);
         LargeInteger high = a;
+        if (a.toString().equals("0")) {
+            return a;
+        }
+
         while (compare(add(low, new LargeInteger(1L)), high) == -1) {
             LargeInteger mid = divide(add(low, high), new LargeInteger(2L));
             LargeInteger powMid = power(mid, 2);
@@ -323,6 +350,10 @@ public class LargeInteger {
             } else return mid;
         }
         return low;
+    }
+
+    LargeInteger mod(LargeInteger a, LargeInteger b) {
+        return null;
     }
 
     @Override
