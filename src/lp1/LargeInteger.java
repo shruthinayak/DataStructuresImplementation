@@ -41,6 +41,7 @@ public class LargeInteger {
         this.number = x.number.subList(start, end);
         this.positive = sign;
     }
+
     LargeInteger(Long num) {
         this(String.valueOf(num));
     }
@@ -194,7 +195,7 @@ public class LargeInteger {
         long carry = 0;
         for (Long num2 : b.number) {
             Long pro = num1 * num2 + carry;
-            //if product is greater than base, take carry
+            //if product1 is greater than base, take carry
             long temp = pro % B;
             carry = pro / B;
             result.number.add(temp);
@@ -205,6 +206,19 @@ public class LargeInteger {
     }
 
     static LargeInteger product(LargeInteger a, LargeInteger b) {
+        boolean aSign = a.positive;
+        boolean bSign = b.positive;
+        boolean pos = a.positive == b.positive;
+        a.positive = true;
+        b.positive = true;
+        LargeInteger result = product1(a, b);
+        result.positive = pos;
+        a.positive = aSign;
+        b.positive = bSign;
+        return result;
+    }
+
+    static LargeInteger product1(LargeInteger a, LargeInteger b) {
 
         if (a.number.size() == 1 || b.number.size() == 1) {
             return multiply(a, b);
@@ -216,11 +230,11 @@ public class LargeInteger {
         LargeInteger ar = new LargeInteger(a, n / 2, a.number.size());
         LargeInteger bl = new LargeInteger(b, 0, n / 2);
         LargeInteger br = new LargeInteger(b, n / 2, b.number.size());
-        LargeInteger xl = product(al, bl);
-        LargeInteger xr = product(ar, br);
+        LargeInteger xl = product1(al, bl);
+        LargeInteger xr = product1(ar, br);
         LargeInteger aSum = add(al, ar);
         LargeInteger bSum = add(bl, br);
-        LargeInteger xm = product(aSum, bSum);
+        LargeInteger xm = product1(aSum, bSum);
 
         LargeInteger middle = subtract(subtract(xm, xl), xr);
         for (int i = 0; i < n / 2; i++) {
@@ -239,9 +253,9 @@ public class LargeInteger {
         if (n == 0) return new LargeInteger((long) 1);
         if (n == 1) return a;
         LargeInteger result = power(a, n / 2);
-        result = product(result, result);
+        result = product1(result, result);
         if (n % 2 != 0) {
-            result = product(result, a);
+            result = product1(result, a);
         }
         return result;
     }
@@ -253,7 +267,7 @@ public class LargeInteger {
             long a0 = n.number.get(0);
             n.number.remove(0);
             LargeInteger xtos = power(a, n);
-            return product(power(xtos, B), power(a, a0));
+            return product1(power(xtos, B), power(a, a0));
         }
     }
 
@@ -283,7 +297,7 @@ public class LargeInteger {
 
         while (compare(add(low, new LargeInteger(1L)), high) == -1) {
             LargeInteger mid = divideByN(add(low, high));
-            LargeInteger powMid = product(mid, b);
+            LargeInteger powMid = product1(mid, b);
             if (compare(powMid, a) == 1) {
                 high = mid;
             } else if (compare(powMid, a) == -1) {
