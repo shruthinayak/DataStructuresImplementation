@@ -6,11 +6,11 @@ import java.util.List;
 
 
 public class LargeInteger {
-    final static int B = 100;
+    final static int B = 100; //Base
     final int pow = 2;
-    boolean positive = true;
+    boolean positive = true; //Sign. By default, the number is assumed to be positive
 
-    List<Long> number;
+    List<Long> number; //List in which we store the number in the reverse way.
 
     LargeInteger() {
         this.number = new ArrayList<>();
@@ -46,7 +46,13 @@ public class LargeInteger {
         this(String.valueOf(num));
     }
 
-
+    /**
+     * Utility function that appends zeroes to a certain number
+     *
+     * @param s   the string that has to be appended with zeroes
+     * @param pow the width of the string
+     * @return string with leading zeroes
+     */
     static String leadingZeroes(String s, int pow) {
         return String.format(String.format("%%0%dd", pow), Long.parseLong(s));
     }
@@ -55,6 +61,13 @@ public class LargeInteger {
         return decideAddSubtract(a, b);
     }
 
+    /**
+     * Returns the sum of the 2 LargeIntegers
+     *
+     * @param a LargeInteger List
+     * @param b LargeInteger List
+     * @return LargeInteger that returns the sum of a and b
+     */
     static LargeInteger add(List<Long> a, List<Long> b) {
         Iterator aI = a.iterator();
         Iterator bI = b.iterator();
@@ -81,11 +94,17 @@ public class LargeInteger {
     static LargeInteger subtract(LargeInteger a, LargeInteger b) {
         b.positive = !b.positive;//314, -625
         LargeInteger i = decideAddSubtract(a, b);
-
         b.positive = !b.positive;
         return i;
     }
 
+    /**
+     * Function that decides whether to add or subtract based on the signs.
+     *
+     * @param a
+     * @param b
+     * @return LargeInteger accordingly.
+     */
     private static LargeInteger decideAddSubtract(LargeInteger a, LargeInteger b) {
         LargeInteger result;
         if (a.positive == b.positive) {
@@ -98,8 +117,15 @@ public class LargeInteger {
         return result;
     }
 
+    /**
+     * Subtract logic for 2 LargeIntegers
+     *
+     * @param a
+     * @param b
+     * @return LargeInteger that contains the difference of a and b.
+     */
     static LargeInteger subtract(List<Long> a, List<Long> b) {
-        boolean reverse = false;
+        boolean reverse = false; //boolean to represent whether a-b or b-a
         int zero = 0;
         int curr = 0, count = 0;
         if (b.size() > a.size()) {
@@ -145,6 +171,7 @@ public class LargeInteger {
             result.number.add(diff);
         }
 
+        //Remove if any leading zeroes.
         while (curr < count - 1) {
             result.number.remove(curr + 1);
             count--;
@@ -153,7 +180,13 @@ public class LargeInteger {
         return result;
     }
 
-
+    /**
+     * Gets the sign for the LargeInteger that contains the difference of a and b.
+     *
+     * @param a
+     * @param b
+     * @return true - indicates positive sign. false - indicates negative sign
+     */
     static boolean getSign(LargeInteger a, LargeInteger b) {
         //is b>a?
 
@@ -173,6 +206,7 @@ public class LargeInteger {
         return a.positive;
 
     }
+
 
     static LargeInteger multiply(LargeInteger a, LargeInteger b) {
         if (a.number.size() == 1 && b.number.size() == 1) {
@@ -219,6 +253,13 @@ public class LargeInteger {
         return result;
     }
 
+    /**
+     * Returns the product of a and b.
+     *
+     * @param a
+     * @param b
+     * @return LargeInteger that contains the product of a and b.
+     */
     static LargeInteger product1(LargeInteger a, LargeInteger b) {
 
         if (a.number.size() == 1 || b.number.size() == 1) {
@@ -256,6 +297,13 @@ public class LargeInteger {
 
     }
 
+    /**
+     * Computes the power
+     *
+     * @param a the number
+     * @param n the exponent
+     * @return LargeInteger that represents the number to the power exponent.
+     */
     static LargeInteger power(LargeInteger a, long n) {
         if (n == 0) return new LargeInteger((long) 1);
         if (n == 1) return a;
@@ -267,7 +315,13 @@ public class LargeInteger {
         return result;
     }
 
-
+    /**
+     * Computes the power when the exponent is a LargeInteger
+     *
+     * @param a
+     * @param n
+     * @return LargeInteger that represents the power when the exponent is a LargeInteger
+     */
     static LargeInteger power(LargeInteger a, LargeInteger n) {
         if (n.number.size() == 1) return power(a, n.number.get(0));
         else {
@@ -281,7 +335,15 @@ public class LargeInteger {
     static LargeInteger divide(LargeInteger a, LargeInteger b) {
         return divideMod(a, b, true);
     }
-    // divide a/b
+
+    /**
+     * Computes Remainder or Quotient.
+     *
+     * @param a      the numerator
+     * @param b      the denominator
+     * @param divide boolean that decides whether quotient is required or remainder
+     * @return Remainder or Quotient depending on the boolean
+     */
     static LargeInteger divideMod(LargeInteger a, LargeInteger b, boolean divide) {
         boolean aSign = a.positive;
         boolean bSign = b.positive;
@@ -333,7 +395,11 @@ public class LargeInteger {
         else return subtract(a, prevPowMid);
     }
 
-
+    /**
+     * Utility function that computes a/2
+     * @param a LargeInteger
+     * @return LargeInteger that represents a/2
+     */
     static LargeInteger divideByN(LargeInteger a) {
         LargeInteger result = new LargeInteger();
         long carry = 0;
@@ -349,6 +415,12 @@ public class LargeInteger {
         return result;
     }
 
+    /**
+     * Returns if a>b
+     * @param a
+     * @param b
+     * @return integer 0 representing they are equal, 1 if greater, -1 if lower
+     */
     public static int compare(LargeInteger a, LargeInteger b) {
 
         LargeInteger temp = subtract(a, b);
