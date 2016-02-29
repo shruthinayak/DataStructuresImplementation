@@ -215,6 +215,7 @@ public class LargeInteger {
         result.positive = pos;
         a.positive = aSign;
         b.positive = bSign;
+
         return result;
     }
 
@@ -245,6 +246,12 @@ public class LargeInteger {
             xr.number.add(0, (long) 0);
         }
         LargeInteger result = add(add(xl, middle), xr);
+
+        while (result.number.get(result.number.size() - 1) == 0 && result.number.size() > 1) {
+            result.number.remove(result.number.size() - 1);
+
+        }
+
         return result;
 
     }
@@ -384,6 +391,17 @@ public class LargeInteger {
         }
     }
 
+    static LargeInteger factorial(LargeInteger a) {
+        LargeInteger x = new LargeInteger(2L);
+        LargeInteger result = new LargeInteger(a, 0, a.number.size());
+        while (compare(x, a) < 0) {
+            result = product(result, x);
+            x = add(x, new LargeInteger(1L));
+        }
+
+        return result;
+    }
+
     @Override
     public String toString() {
         int len = number.size() - 1;
@@ -406,10 +424,18 @@ public class LargeInteger {
         if (sb.toString().length() == 0) {
             sb.append("0");
         }
+
         return sb.toString();
     }
 
+
     void printList() {
-        System.out.println(toString());
+        System.out.print(B + ":");
+        for (long a : this.number) {
+            System.out.print(a + " ");
+        }
+        System.out.println();
+//        System.out.println(toString());
     }
+
 }
