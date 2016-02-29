@@ -1,19 +1,24 @@
 package lp1;
 
 
+import com.sun.jna.platform.win32.WinDef;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Stack;
+import java.util.stream.Collector;
 
 
 public class Driver {
     public static void main(String[] args) throws FileNotFoundException {
 
-        String pathname = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp1-data/s1/lp0-s1-in-6.txt";
+        String pathname = "C:\\D\\Implementation\\projects\\DataStructuresImplementation\\lp1-data-s1\\lp1-data\\s1\\lp0-s1-in-5.txt";
 //        String pathname = args[1];
         lp1_driver(pathname);
+//        lp1_driver_level2(pathname);
     }
 
     private static void lp1_driver(String pathname) throws FileNotFoundException {
@@ -25,9 +30,10 @@ public class Driver {
         while (read.hasNext()) {
             line = read.nextLine();
             if (Character.isDigit(line.charAt(0)))
-                inputCommands.add(line.substring(2));
+                inputCommands.add(line.split(" ")[1]);//substring(2));
 
         }
+
         for (int i = 0; i < inputCommands.size(); i++) {
             String s = inputCommands.get(i);
             LargeInteger current = null;
@@ -35,17 +41,17 @@ public class Driver {
             if (s.contains("=")) {
                 String[] split = s.split("=");
                 String var = split[0].trim();
-                if (!vars.containsKey(var)) {
-                    if (split[1].trim().matches("-?\\d+"))
-                        vars.put(var, new LargeInteger(split[1].trim()));
-                    else
-                        vars.put(var, new LargeInteger());
-                }
+
+                if (split[1].trim().matches("-?\\d+"))
+                    vars.put(var, new LargeInteger(split[1].trim()));
+                else if (!vars.containsKey(var))
+                    vars.put(var, new LargeInteger());
+
                 String sign = getSign(split[1]);
                 if (sign.isEmpty()) continue;
                 String[] values = split[1].trim().split(("\\" + sign));
-                LargeInteger var1 = vars.get(values[0].trim());
-                LargeInteger var2 = vars.get(values[1].trim());
+                LargeInteger var1 = getLargeInteger(values[0].trim(), vars);
+                LargeInteger var2 = getLargeInteger(values[1].trim(), vars);
                 switch (sign) {
                     case "+":
                         current = LargeInteger.add(var1, var2);
@@ -77,25 +83,36 @@ public class Driver {
 
             } else if (s.contains("?")) {
                 String[] split = s.split("\\?");
-                current = vars.get(split[0].trim());
+                current = getLargeInteger(split[0].trim(), vars);
                 String[] linenos = split[1].trim().split(":");
                 int l1 = Integer.parseInt(linenos[0].trim());
                 if (!current.toString().equals("0"))
-                    i = l1 - 2;//because i++ will follow, and the list is 0 indexed
+                    i = l1 - 2;
                 else if (linenos.length > 2) {
                     i = Integer.parseInt(linenos[1].trim()) - 2;
                 }
             } else if (s.contains(")")) {
                 String[] split = s.split("\\)");
-                current = vars.get(split[0].trim());
+                current = getLargeInteger(split[0].trim(), vars); //vars.get(split[0].trim());
                 current.printList();
             } else {
-                current = vars.get(s.trim());
+                current = getLargeInteger(s.trim(), vars);// vars.get(s.trim());
                 System.out.println(current);
             }
         }
         read.close();
     }
+
+
+    private static LargeInteger getLargeInteger(String variable, HashMap<String, LargeInteger> vars) {
+        LargeInteger nVariable;
+        if (variable.matches("-?\\d+"))
+            nVariable = new LargeInteger(variable);
+        else
+            nVariable = vars.get(variable);
+        return nVariable;
+    }
+
 
     public static String getSign(String s) {
         String[] signs = {"+", "-", "*", "/", "^", "!", "~", "%"};
@@ -106,6 +123,7 @@ public class Driver {
         }
         return "";
     }
+
 }
 /*
 Output:
