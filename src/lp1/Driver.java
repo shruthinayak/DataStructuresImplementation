@@ -1,56 +1,37 @@
 package lp1;
 
-/**
- * Created by tejas on 2/28/2016.
- */
-
-import common.Timer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
-/**
- * Driver program for LP1, level 1
- *
- * @author rbk
- *         Edit and replace "XYZ" by the name of your class
- */
-
 public class Driver {
     public static void main(String[] args) throws FileNotFoundException {
-        LargeInteger a = new LargeInteger("-01211");
-        LargeInteger b = new LargeInteger("010");
-        b.printList();
-        Timer time = new Timer();
-//        LargeInteger c = LargeInteger.product(a, b);
-//        System.out.println("c= " + c);
 
-        lp1_driver();
+        String pathname = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp1-data/s1/lp0-s1-in-6.txt";
+//        String pathname = args[1];
+        lp1_driver(pathname);
     }
 
-    private static void lp1_driver() throws FileNotFoundException {
-        Scanner sc = new Scanner(new File("C:\\D\\Implementation\\projects\\DataStructuresImplementation\\lp1-data-s1\\lp1-data\\s1\\lp0-s1-in-5.txt"));
+    private static void lp1_driver(String pathname) throws FileNotFoundException {
+
+        Scanner read = new Scanner(new File(pathname));
         String line = null;
         ArrayList<String> inputCommands = new ArrayList<>();
         HashMap<String, LargeInteger> vars = new HashMap<>();
-        while (true) {
-            try {
-                line = sc.nextLine();
-                if (Character.isDigit(line.charAt(0)))
-                    inputCommands.add(line.substring(2));
-            } catch (NoSuchElementException nse) {
-                break;
-            }
+        while (read.hasNext()) {
+            line = read.nextLine();
+            if (Character.isDigit(line.charAt(0)))
+                inputCommands.add(line.substring(2));
+
         }
         for (int i = 0; i < inputCommands.size(); i++) {
             String s = inputCommands.get(i);
             LargeInteger current = null;
+
             if (s.contains("=")) {
                 String[] split = s.split("=");
                 String var = split[0].trim();
@@ -60,54 +41,40 @@ public class Driver {
                     else
                         vars.put(var, new LargeInteger());
                 }
-                current = vars.get(var);
-                if (split[1].contains("+")) {
-                    String[] values = split[1].trim().split("\\+");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    LargeInteger var2 = vars.get(values[1].trim());
-                    current = LargeInteger.add(var1, var2);
-                    vars.put(var, current);
-                } else if (split[1].contains("-")) {
-                    String[] values = split[1].trim().split("-");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    LargeInteger var2 = vars.get(values[1].trim());
-                    current = LargeInteger.subtract(var1, var2);
-                    vars.put(var, current);
-                } else if (split[1].contains("*")) {
-                    String[] values = split[1].trim().split("\\*");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    LargeInteger var2 = vars.get(values[1].trim());
-                    current = LargeInteger.product(var1, var2);
-                    vars.put(var, current);
-                } else if (split[1].contains("/")) {
-                    String[] values = split[1].trim().split("/");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    LargeInteger var2 = vars.get(values[1].trim());
-                    current = LargeInteger.divide(var1, var2);
-                    vars.put(var, current);
-                } else if (split[1].contains("%")) {
-                    String[] values = split[1].trim().split("%");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    LargeInteger var2 = vars.get(values[1].trim());
-                    current = LargeInteger.mod(var1, var2);
-                    vars.put(var, current);
-                } else if (split[1].contains("^")) {
-                    String[] values = split[1].trim().split("\\^");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    LargeInteger var2 = vars.get(values[1].trim());
-                    current = LargeInteger.power(var1, var2);
-                    vars.put(var, current);
-                } else if (split[1].contains("!")) {
-                    String[] values = split[1].trim().split("!");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    current = LargeInteger.factorial(var1);
-                    vars.put(var, current);
-                } else if (split[1].contains("~")) {
-                    String[] values = split[1].trim().split("~");
-                    LargeInteger var1 = vars.get(values[0].trim());
-                    current = LargeInteger.squareRoot(var1);
-                    vars.put(var, current);
+                String sign = getSign(split[1]);
+                if (sign.isEmpty()) continue;
+                String[] values = split[1].trim().split(("\\" + sign));
+                LargeInteger var1 = vars.get(values[0].trim());
+                LargeInteger var2 = vars.get(values[1].trim());
+                switch (sign) {
+                    case "+":
+                        current = LargeInteger.add(var1, var2);
+                        break;
+                    case "-":
+                        current = LargeInteger.subtract(var1, var2);
+                        break;
+                    case "*":
+                        current = LargeInteger.product(var1, var2);
+                        break;
+                    case "/":
+                        current = LargeInteger.divide(var1, var2);
+                        break;
+                    case "%":
+                        current = LargeInteger.mod(var1, var2);
+                        break;
+                    case "^":
+                        current = LargeInteger.power(var1, var2);
+                        break;
+                    case "!":
+                        current = LargeInteger.factorial(var1);
+                        break;
+                    case "~":
+                        current = LargeInteger.squareRoot(var1);
+                        break;
+
                 }
+                vars.put(var, current);
+
             } else if (s.contains("?")) {
                 String[] split = s.split("\\?");
                 current = vars.get(split[0].trim());
@@ -127,7 +94,17 @@ public class Driver {
                 System.out.println(current);
             }
         }
-        sc.close();
+        read.close();
+    }
+
+    public static String getSign(String s) {
+        String[] signs = {"+", "-", "*", "/", "^", "!", "~", "%"};
+        for (String i : signs) {
+            if (s.contains(i)) {
+                return i;
+            }
+        }
+        return "";
     }
 }
 /*
