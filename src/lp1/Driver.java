@@ -29,7 +29,7 @@ public class Driver {
         b.printList();
         Timer time = new Timer();
 //        LargeInteger c = LargeInteger.product(a, b);
-        System.out.println("c= " + c);
+//        System.out.println("c= " + c);
 
         lp1_driver();
     }
