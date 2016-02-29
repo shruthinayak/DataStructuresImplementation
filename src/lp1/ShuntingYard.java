@@ -13,7 +13,8 @@ public class ShuntingYard {
     Stack<Operator> stack = new Stack<>();
 
     public static void main(String[] args) throws FileNotFoundException {
-        String pathname = "";
+
+        String pathname = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/test";
 
         Scanner read = new Scanner(new File(pathname));
         String line = null;
@@ -35,17 +36,18 @@ public class ShuntingYard {
                 if (!vars.containsKey(var)) {
                     if (split[1].trim().matches("-?\\d+"))
                         vars.put(var, new LargeInteger(split[1].trim()));
-                    else
+                    else {
                         vars.put(var, new LargeInteger());
+                    }
                 }
-                String postfix = evaluate(split[1]);
-
-            }
+                String postfix = getPostfix(s);
+                evaluate(vars, postfix);
+            } else vars.get(s).printList();
 
         }
     }
 
-    static String evaluate(String expression) {
+    static String getPostfix(String expression) {
         Queue<Character> q = new LinkedList<>();
         Stack<Operator> stack = new Stack<>();
         stack.push(Operator.NULL);
@@ -79,13 +81,74 @@ public class ShuntingYard {
         while (!(stack.size() == 1))
             q.add(stack.pop().sign);
         StringBuilder sb = new StringBuilder();
+        sb.append(expression.split("=")[0]);
+        sb.append("=");
         for (char c : q) {
             sb.append(c);
         }
+
         return sb.toString();
     }
 
     //a=a+3*4^2^3!
+    public static LargeInteger evaluate(HashMap<String, LargeInteger> vars, String exp) {
+        Stack<LargeInteger> s = new Stack<>();
+        char[] a = exp.split("=")[1].toCharArray();
+
+        for (char c : a) {
+            if (isAtom(c)) {
+                if (Character.isLetter(c))
+                    s.push(vars.get(c + ""));
+                else
+                    s.push(new LargeInteger(c + ""));
+            } else {
+
+                LargeInteger var1 = s.pop();
+                Operator o = getOperator(c);
+                LargeInteger current = new LargeInteger();
+                LargeInteger var2;
+                switch (o.sign) {
+                    case '+':
+                        var2 = s.pop();
+                        current = LargeInteger.add(var2, var1);
+                        break;
+                    case '-':
+                        var2 = s.pop();
+                        current = LargeInteger.subtract(var2, var1);
+                        break;
+                    case '*':
+                        var2 = s.pop();
+                        current = LargeInteger.product(var2, var1);
+                        break;
+                    case '/':
+                        var2 = s.pop();
+                        current = LargeInteger.divide(var2, var1);
+                        break;
+                    case '%':
+                        var2 = s.pop();
+                        current = LargeInteger.mod(var2, var1);
+                        break;
+                    case '!':
+                        current = LargeInteger.factorial(var1);
+                        break;
+                    case '^':
+                        var2 = s.pop();
+                        current = LargeInteger.power(var2, var1);
+                        break;
+
+                    case '~':
+                        current = LargeInteger.squareRoot(var1);
+                        break;
+
+                }
+//                System.out.println(o.sign);
+//                current.printList();
+                s.push(current);
+                vars.put(exp.split("=")[0], current);
+            }
+        }
+        return s.pop();
+    }
 
     static boolean isAtom(char ch) {
         return Character.isLetter(ch) || Character.isDigit(ch);
@@ -117,7 +180,7 @@ public class ShuntingYard {
     }
 
     enum Operator {
-        FACT('!', 10),
+        FACT('!', 11),
         POWER('^', 10, true),
         PRODUCT('*', 9),
         DIVIDE('/', 9),
