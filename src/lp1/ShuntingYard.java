@@ -28,7 +28,6 @@ public class ShuntingYard {
         }
         for (int i = 0; i < inputCommands.size(); i++) {
             String s = inputCommands.get(i);
-            LargeInteger current = null;
 
             if (s.contains("=")) {
                 String[] split = s.split("=");
@@ -58,7 +57,7 @@ public class ShuntingYard {
             if (isAtom(i)) {
                 q.add(i);
             } else {
-                Operator n = getOperator(i);
+                Operator n = Operator.getOperator(i);
                 if (n == Operator.CLOSE) {
                     while (stack.peek() != Operator.OPEN) {
                         q.add(stack.pop().sign);
@@ -104,7 +103,7 @@ public class ShuntingYard {
             } else {
 
                 LargeInteger var1 = s.pop();
-                Operator o = getOperator(c);
+                Operator o = Operator.getOperator(c);
                 LargeInteger current = new LargeInteger();
                 LargeInteger var2;
                 switch (o.sign) {
@@ -141,8 +140,6 @@ public class ShuntingYard {
                         break;
 
                 }
-//                System.out.println(o.sign);
-//                current.printList();
                 s.push(current);
                 vars.put(exp.split("=")[0], current);
             }
@@ -152,31 +149,6 @@ public class ShuntingYard {
 
     static boolean isAtom(char ch) {
         return Character.isLetter(ch) || Character.isDigit(ch);
-    }
-
-    static Operator getOperator(char ch) {
-
-        switch (ch) {
-            case '!':
-                return Operator.FACT;
-            case '^':
-                return Operator.POWER;
-            case '*':
-                return Operator.PRODUCT;
-            case '/':
-                return Operator.DIVIDE;
-            case '%':
-                return Operator.MOD;
-            case '+':
-                return Operator.SUM;
-            case '-':
-                return Operator.DIFFERENCE;
-            case '(':
-                return Operator.OPEN;
-            case ')':
-                return Operator.CLOSE;
-        }
-        return Operator.NULL;
     }
 
     enum Operator {
@@ -203,6 +175,31 @@ public class ShuntingYard {
             this.sign = sign;
             this.precedence = precedence;
             this.left = left;
+        }
+
+        static Operator getOperator(char ch) {
+
+            switch (ch) {
+                case '!':
+                    return Operator.FACT;
+                case '^':
+                    return Operator.POWER;
+                case '*':
+                    return Operator.PRODUCT;
+                case '/':
+                    return Operator.DIVIDE;
+                case '%':
+                    return Operator.MOD;
+                case '+':
+                    return Operator.SUM;
+                case '-':
+                    return Operator.DIFFERENCE;
+                case '(':
+                    return Operator.OPEN;
+                case ')':
+                    return Operator.CLOSE;
+            }
+            return Operator.NULL;
         }
 
     }

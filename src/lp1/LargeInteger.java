@@ -502,12 +502,12 @@ public class LargeInteger {
 
 
     void printList() {
-        System.out.print(B + ":");
+        /*System.out.print(B + ":");
         for (long a : this.number) {
             System.out.print(a + " ");
         }
-        System.out.println();
-//        System.out.println(toString());
+        System.out.println();*/
+        System.out.println(toString());
     }
 
 }
