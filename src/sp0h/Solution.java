@@ -1,12 +1,12 @@
 package sp0h;
 
-import com.intellij.util.ArrayUtil;
-
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
-public class Solution<T> {
+public class Solution<K, V> {
     static Solution s = new Solution();
+    MyHashMap<K, Integer> g = new MyHashMap<>();
 
     public static void main(String[] args) {
         Object[] x;
@@ -24,22 +24,28 @@ public class Solution<T> {
             };
         } else {
             //Generating random numbers
-            int len = 10000000;
-            x = new Object[len];
-            Random rand = new Random();
-            int i = 0;
-            while (i != len) {
-                x[i] = rand.nextInt(10);
-                i++;
+            int len = 1000;
+            while (len < 10000000) {
+                x = new Object[len];
+                Random rand = new Random();
+                int i = 0;
+                while (i != len) {
+                    x[i] = rand.nextInt(100);
+                    i++;
+                }
+                System.out.println("For " + len + " elements:");
+                s.mostFrequent(x);
+                len = len + 1000000;
             }
         }
-        s.removingDuplicates(x);
-        s.mostFrequent(x);
+
+        System.out.println("Generated random number array");
+//        s.removingDuplicates(x);
 
 
     }
 
-    public void removingDuplicates(T[] x) {
+    public void removingDuplicates(K[] x) {
         long start = System.currentTimeMillis();
         int k = s.findDistinct(x);
         long end = System.currentTimeMillis();
@@ -50,50 +56,67 @@ public class Solution<T> {
         }
     }
 
-    public int findDistinct(T[] arr) {
-        HashList<T> g = new HashList<>(arr.length);
+    public int findDistinct(K[] arr) {
+
+        int distinct = 0;
         for (int i = 0; i < arr.length; i++) {
-            g.insert(arr, arr[i], i);
+            if (!g.hasKey(arr[i])) {
+                g.put(arr[i], 1);
+                swap(arr, distinct, i);
+                distinct++;
+            } else {
+                Integer count = g.get(arr[i]);
+                g.put(arr[i], ++count);
+            }
         }
-        return g.k;
+        return distinct;
     }
 
-    public int mostFrequent(T[] arr) {
+    private void swap(K[] a, int i, int index) {
+        K x = a[i];
+        a[i] = a[index];
+        a[index] = x;
+    }
+
+    public int mostFrequent(K[] arr) {
         mostFreqWithSort(arr);
         return mostFreqWithHashMap(arr);
     }
 
-    private int mostFreqWithHashMap(T[] arr) {
-        long start;
-        int max;
-        long end;
-
-        Integer[] x = ArrayUtil.toObjectArray(Integer.class, arr);
-        start = System.currentTimeMillis();
-        HashList<Integer> g = new HashList<>(arr.length);
-        max = -1;
-        int e = 0;
-        for (int i = 0; i < arr.length; i++) {
-            g.insert(x, x[i], i);
-            if (g.elementFreq(x[i]) > max) {
-                max = g.elementFreq(x[i]);
-                e = x[i];
+    private int mostFreqWithHashMap(K[] arr) {
+        long start = System.currentTimeMillis();
+        MyHashMap<K, Integer> count = new MyHashMap<>();
+        for (K i : arr) {
+            if (!count.hasKey(i)) {
+                count.put(i, 1);
+            } else {
+                int c = count.get(i);
+                count.put(i, ++c);
             }
         }
-        end = System.currentTimeMillis();
-        System.out.println("HashMap impl  - " + (end - start) + "ms");
-        System.out.println(e + ":" + max);
+        List<K> keySet = count.keySet();
+        int max = Integer.MIN_VALUE;
+        K ele = null;
+        for (K key : keySet) {
+            if (max < count.get(key)) {
+                max = count.get(key);
+                ele = key;
+            }
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("HashMap Impl - " + (end - start) + "ms");
+        System.out.println(ele + ":" + max);
         return max;
     }
 
-    private void mostFreqWithSort(T[] arr) {
-        T[] cpy = arr.clone();
+    private void mostFreqWithSort(K[] arr) {
+        K[] cpy = arr.clone();
         long start = System.currentTimeMillis();
 
         Arrays.sort(cpy);
 
-        T previous = cpy[0];
-        T popular = cpy[0];
+        K previous = cpy[0];
+        K popular = cpy[0];
         int count = 1;
         int maxCount = 1;
 
