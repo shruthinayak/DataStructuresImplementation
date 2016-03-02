@@ -9,25 +9,25 @@ import java.util.List;
  */
 
 
-public class MyHashMap<K, V> {
+public class SeparateChaining<K, V> implements HashMapIfc<K, V> {
     float loadFactor = 0.75f;
-    int tableSize = 5;
+    int tableSize = 10;
     double k;
     LinkedList<K>[] keys;
     LinkedList<V>[] values;
     List<K> keySet;
 
 
-    MyHashMap() {
+    SeparateChaining() {
         init(tableSize);
     }
 
-    MyHashMap(int tableSize) {
+    SeparateChaining(int tableSize) {
         this.tableSize = tableSize;
         init(tableSize);
     }
 
-    private void init(int tableSize) {
+    protected void init(int tableSize) {
         this.k = 0;
         this.keys = new LinkedList[tableSize];
         this.values = new LinkedList[tableSize];
@@ -35,11 +35,11 @@ public class MyHashMap<K, V> {
             this.keys[i] = new LinkedList<K>();
             this.values[i] = new LinkedList<V>();
         }
-        keySet = null;
+        keySet = keySet();
     }
 
-    private void resize() {
-        MyHashMap<K, V> newTable = new MyHashMap<>(tableSize * 2);
+    protected void resize() {
+        SeparateChaining<K, V> newTable = new SeparateChaining<>(tableSize * 2);
         List<K> keyS = keySet();
         for (K key : keyS) {
             newTable.put(key, get(key));
@@ -54,10 +54,9 @@ public class MyHashMap<K, V> {
         init(tableSize);
     }
 
-    int hashFunction(K obj) {
+    public int hashFunction(K obj) {
         int key = obj.hashCode();
-        int i = key % tableSize;
-        return i;
+        return key % tableSize;
     }
 
     /**
@@ -67,22 +66,29 @@ public class MyHashMap<K, V> {
      * @param key
      * @param value
      */
-    void put(K key, V value) {
-        if (isResizeNecessary()) {
-            resize();
-        }
+    public void put(K key, V value) {
         int index = hashFunction(key);
+        insert(key, value, index);
+    }
+
+    protected void insert(K key, V value, int index) {
+
         if (!find(key)) {
+            if (isResizeNecessary()) {
+                resize();
+            }
             keys[index].add(key);
             values[index].add(keys[index].size() - 1, value);
             k++;
+            keySet.add(key);
         } else {
             int indexList = keys[index].indexOf(key);
             values[index].set(indexList, value);
         }
     }
 
-    V get(K key) {
+    @Override
+    public V get(K key) {
         if (find(key)) {
             int index = hashFunction(key);
             int indexInList = keys[index].indexOf(key);
@@ -91,27 +97,31 @@ public class MyHashMap<K, V> {
 
     }
 
-    List<K> keySet() {
-        keySet = new ArrayList<>();
-        for (LinkedList<K> keyList : keys) {
-            keySet.addAll(keyList);
+    @Override
+    public void delete(K key) {
+        int i = keys[hashFunction(key)].indexOf(key);
+        keys[i] = null;
+        values[hashFunction(key)].set(i, null);
+    }
+
+    @Override
+    public List<K> keySet() {
+        if (keySet == null) {
+            keySet = new ArrayList<>();
+            for (LinkedList<K> keyList : keys) {
+                keySet.addAll(keyList);
+            }
         }
         return keySet;
     }
-
 
     boolean find(K obj) {
         int i = hashFunction(obj);
         return keys[i] != null && keys[i].contains(obj);
     }
 
-    void delete(K[] a, K obj) {
-        if (find(obj)) {
-            a[hashFunction(obj)] = null;
-        }
-    }
 
-    boolean hasKey(K obj) {
+    public boolean hasKey(K obj) {
         return find(obj);
     }
 

@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Solution<K, V> {
     static Solution s = new Solution();
-    MyHashMap<K, Integer> g = new MyHashMap<>();
+    HashMapIfc<K, Integer> g = new TwoChoice<>();
 
     public static void main(String[] args) {
         Object[] x;
@@ -24,23 +24,19 @@ public class Solution<K, V> {
             };
         } else {
             //Generating random numbers
-            int len = 1000;
-            while (len < 10000000) {
-                x = new Object[len];
-                Random rand = new Random();
-                int i = 0;
-                while (i != len) {
-                    x[i] = rand.nextInt(100);
-                    i++;
-                }
-                System.out.println("For " + len + " elements:");
-                s.mostFrequent(x);
-                len = len + 1000000;
+            int len = 9000000;
+            x = new Object[len];
+            Random rand = new Random();
+            int i = 0;
+            while (i != len) {
+                x[i] = rand.nextInt(10);
+                i++;
             }
+            System.out.println("For " + len + " elements:");
+            s.mostFrequent(x);
         }
-
         System.out.println("Generated random number array");
-//        s.removingDuplicates(x);
+        s.removingDuplicates(x);
 
 
     }
@@ -51,9 +47,9 @@ public class Solution<K, V> {
         long end = System.currentTimeMillis();
         System.out.println("The number of distinct elements is: " + k);
         System.out.println("To compute distinct elements in an array of length " + x.length + " is " + (end - start) + "ms");
-        for (int j = 0; j < k; j++) {
+       /* for (int j = 0; j < k; j++) {
             System.out.println(x[j]);
-        }
+        }*/
     }
 
     public int findDistinct(K[] arr) {
@@ -85,7 +81,7 @@ public class Solution<K, V> {
 
     private int mostFreqWithHashMap(K[] arr) {
         long start = System.currentTimeMillis();
-        MyHashMap<K, Integer> count = new MyHashMap<>();
+        HashMapIfc<K, Integer> count = new TwoChoice<>();
         for (K i : arr) {
             if (!count.hasKey(i)) {
                 count.put(i, 1);
