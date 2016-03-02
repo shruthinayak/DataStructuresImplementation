@@ -1,8 +1,8 @@
 package sp0h;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by shruthi on 26/2/16.
@@ -15,7 +15,7 @@ public class SeparateChaining<K, V> implements HashMapIfc<K, V> {
     double k;
     LinkedList<K>[] keys;
     LinkedList<V>[] values;
-    List<K> keySet;
+    Set<K> keySet;
 
 
     SeparateChaining() {
@@ -40,7 +40,7 @@ public class SeparateChaining<K, V> implements HashMapIfc<K, V> {
 
     protected void resize() {
         SeparateChaining<K, V> newTable = new SeparateChaining<>(tableSize * 2);
-        List<K> keyS = keySet();
+        Set<K> keyS = keySet();
         for (K key : keyS) {
             newTable.put(key, get(key));
         }
@@ -105,9 +105,9 @@ public class SeparateChaining<K, V> implements HashMapIfc<K, V> {
     }
 
     @Override
-    public List<K> keySet() {
+    public Set<K> keySet() {
         if (keySet == null) {
-            keySet = new ArrayList<>();
+            keySet = new HashSet<>();
             for (LinkedList<K> keyList : keys) {
                 keySet.addAll(keyList);
             }

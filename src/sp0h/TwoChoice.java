@@ -1,6 +1,6 @@
 package sp0h;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by shruthi on 1/3/16.
@@ -20,7 +20,7 @@ public class TwoChoice<K, V> extends SeparateChaining<K, V> implements HashMapIf
     @Override
     protected void resize() {
         TwoChoice<K, V> newTable = new TwoChoice<>(tableSize * 2);
-        List<K> keyS = keySet();
+        Set<K> keyS = keySet();
         for (K key : keyS) {
             newTable.put(key, get(key));
         }

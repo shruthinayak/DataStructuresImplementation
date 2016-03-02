@@ -1,6 +1,6 @@
 package sp0h;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by shruthi on 1/3/16.
@@ -17,5 +17,5 @@ public interface HashMapIfc<K, V> {
 
     boolean hasKey(K key);
 
-    List<K> keySet();
+    Set<K> keySet();
 }

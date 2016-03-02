@@ -1,12 +1,12 @@
 package sp0h;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class Solution<K, V> {
     static Solution s = new Solution();
-    HashMapIfc<K, Integer> g = new TwoChoice<>();
+
 
     public static void main(String[] args) {
         Object[] x;
@@ -24,14 +24,16 @@ public class Solution<K, V> {
             };
         } else {
             //Generating random numbers
-            int len = 9000000;
+            int len = 1000000;
             x = new Object[len];
             Random rand = new Random();
             int i = 0;
             while (i != len) {
                 x[i] = rand.nextInt(10);
                 i++;
+//                System.out.print(x[i-1]+", ");
             }
+//            x = new Object[]{3, 4, 4, 0, 0, 2, 4, 2, 0, 4, 3, 4, 9, 8, 7};
             System.out.println("For " + len + " elements:");
             s.mostFrequent(x);
         }
@@ -47,13 +49,13 @@ public class Solution<K, V> {
         long end = System.currentTimeMillis();
         System.out.println("The number of distinct elements is: " + k);
         System.out.println("To compute distinct elements in an array of length " + x.length + " is " + (end - start) + "ms");
-       /* for (int j = 0; j < k; j++) {
+        for (int j = 0; j < k; j++) {
             System.out.println(x[j]);
-        }*/
+        }
     }
 
     public int findDistinct(K[] arr) {
-
+        HashMapIfc<K, Integer> g = new CuckooHashing<>();
         int distinct = 0;
         for (int i = 0; i < arr.length; i++) {
             if (!g.hasKey(arr[i])) {
@@ -81,7 +83,7 @@ public class Solution<K, V> {
 
     private int mostFreqWithHashMap(K[] arr) {
         long start = System.currentTimeMillis();
-        HashMapIfc<K, Integer> count = new TwoChoice<>();
+        HashMapIfc<K, Integer> count = new CuckooHashing<>();
         for (K i : arr) {
             if (!count.hasKey(i)) {
                 count.put(i, 1);
@@ -90,7 +92,7 @@ public class Solution<K, V> {
                 count.put(i, ++c);
             }
         }
-        List<K> keySet = count.keySet();
+        Set<K> keySet = count.keySet();
         int max = Integer.MIN_VALUE;
         K ele = null;
         for (K key : keySet) {
