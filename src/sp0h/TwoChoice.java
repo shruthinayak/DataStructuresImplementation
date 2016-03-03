@@ -3,7 +3,10 @@ package sp0h;
 import java.util.Set;
 
 /**
- * Created by shruthi on 1/3/16.
+ * G21
+ * @author Shruthi(sxn145130) Tejasvee(txb140830)
+ * @param <K> Key type
+ * @param <V> Value type
  */
 public class TwoChoice<K, V> extends SeparateChaining<K, V> implements HashMapIfc<K, V> {
 

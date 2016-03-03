@@ -5,10 +5,11 @@ import java.util.LinkedList;
 import java.util.Set;
 
 /**
- * Created by shruthi on 26/2/16.
+ * G21
+ * @author Shruthi(sxn145130) Tejasvee(txb140830)
+ * @param <K> Key type
+ * @param <V> Value type
  */
-
-
 public class SeparateChaining<K, V> implements HashMapIfc<K, V> {
     float loadFactor = 0.75f;
     int tableSize = 10;

@@ -4,44 +4,38 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * G21
+ *
+ * @param <K> Key type
+ * @param <V> Value type
+ * @author Shruthi(sxn145130) Tejasvee(txb140830)
+ */
 public class Solution<K, V> {
     static Solution s = new Solution();
 
 
     public static void main(String[] args) {
-        Object[] x;
-        boolean object = false;
-        if (object) {
-            x = new Object[]{new Support(3, 4, "S"),
-                    new Support(3, 5, "P"),
-                    new Support(3, 4, "S"),
-                    new Support(3, 6, "S"),
-                    new Support(3, 4, "M"),
-                    new Support(6, 4, "N"),
-                    new Support(8, 4, "Q"),
-                    new Support(8, 4, "Q"),
-                    new Support(3, 5, "P")
-            };
-        } else {
-            //Generating random numbers
-            int len = 1000000;
-            x = new Object[len];
-            Random rand = new Random();
-            int i = 0;
-            while (i != len) {
-                x[i] = rand.nextInt(10);
-                i++;
-//                System.out.print(x[i-1]+", ");
-            }
-//            x = new Object[]{3, 4, 4, 0, 0, 2, 4, 2, 0, 4, 3, 4, 9, 8, 7};
-            System.out.println("For " + len + " elements:");
-            s.mostFrequent(x);
+        Integer[] x;
+
+        //Generating random numbers
+        int len = 1000000;
+        x = new Integer[len];
+        Random rand = new Random();
+        int i = 0;
+        while (i != len) {
+            x[i] = rand.nextInt(10);
+            i++;
         }
+
         System.out.println("Generated random number array");
         s.removingDuplicates(x);
+        System.out.println("For " + len + " elements:");
+        s.mostFrequent(x);
 
 
     }
+
 
     public void removingDuplicates(K[] x) {
         long start = System.currentTimeMillis();
@@ -49,13 +43,21 @@ public class Solution<K, V> {
         long end = System.currentTimeMillis();
         System.out.println("The number of distinct elements is: " + k);
         System.out.println("To compute distinct elements in an array of length " + x.length + " is " + (end - start) + "ms");
-        for (int j = 0; j < k; j++) {
+        /*for (int j = 0; j < k; j++) {
             System.out.println(x[j]);
-        }
+        }*/
     }
 
+    /**
+     *
+     * @param arr An array of objects
+     * @return an integer representing the number of unique elements in the array.
+     */
     public int findDistinct(K[] arr) {
-        HashMapIfc<K, Integer> g = new CuckooHashing<>();
+        HashMapIfc<K, Integer> g = new SeparateChaining<>();
+//        HashMapIfc<K, Integer> g = new TwoChoice<>();
+//        HashMapIfc<K, Integer> g = new CuckooHashing<>();
+
         int distinct = 0;
         for (int i = 0; i < arr.length; i++) {
             if (!g.hasKey(arr[i])) {
@@ -76,15 +78,21 @@ public class Solution<K, V> {
         a[index] = x;
     }
 
-    public int mostFrequent(K[] arr) {
+    public int mostFrequent(Integer[] arr) {
         mostFreqWithSort(arr);
         return mostFreqWithHashMap(arr);
     }
 
-    private int mostFreqWithHashMap(K[] arr) {
+    /**
+     * @param arr Integer array
+     * @return The most frequent element in the array.
+     */
+    private int mostFreqWithHashMap(Integer[] arr) {
         long start = System.currentTimeMillis();
-        HashMapIfc<K, Integer> count = new CuckooHashing<>();
-        for (K i : arr) {
+        HashMapIfc<Integer, Integer> count = new SeparateChaining<>();
+//        HashMapIfc<Integer, Integer> count = new TwoChoice<>();
+//        HashMapIfc<Integer, Integer> count = new CuckooHashing<>();
+        for (Integer i : arr) {
             if (!count.hasKey(i)) {
                 count.put(i, 1);
             } else {
@@ -92,10 +100,10 @@ public class Solution<K, V> {
                 count.put(i, ++c);
             }
         }
-        Set<K> keySet = count.keySet();
+        Set<Integer> keySet = count.keySet();
         int max = Integer.MIN_VALUE;
-        K ele = null;
-        for (K key : keySet) {
+        Integer ele = null;
+        for (Integer key : keySet) {
             if (max < count.get(key)) {
                 max = count.get(key);
                 ele = key;
@@ -104,17 +112,17 @@ public class Solution<K, V> {
         long end = System.currentTimeMillis();
         System.out.println("HashMap Impl - " + (end - start) + "ms");
         System.out.println(ele + ":" + max);
-        return max;
+        return ele;
     }
 
-    private void mostFreqWithSort(K[] arr) {
-        K[] cpy = arr.clone();
+    private void mostFreqWithSort(Integer[] arr) {
+        Integer[] cpy = arr.clone();
         long start = System.currentTimeMillis();
 
         Arrays.sort(cpy);
 
-        K previous = cpy[0];
-        K popular = cpy[0];
+        Integer previous = cpy[0];
+        Integer popular = cpy[0];
         int count = 1;
         int maxCount = 1;
 

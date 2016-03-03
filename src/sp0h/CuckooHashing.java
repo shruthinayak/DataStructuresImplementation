@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by shruthi on 2/3/16.
+ * G21
+ * @author Shruthi(sxn145130) Tejasvee(txb140830)
+ * @param <K> Key type
+ * @param <V> Value type
  */
 public class CuckooHashing<K, V> implements HashMapIfc<K, V>/*extends SeparateChaining<K, V>*/ {
     final int retryLimit = 10;
@@ -135,7 +138,9 @@ public class CuckooHashing<K, V> implements HashMapIfc<K, V>/*extends SeparateCh
 
     @Override
     public void delete(K key) {
+        if (hasKey(key)) {
 
+        }
     }
 
     @Override

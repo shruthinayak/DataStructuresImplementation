@@ -3,7 +3,11 @@ package sp0h;
 import java.util.Set;
 
 /**
- * Created by shruthi on 1/3/16.
+ * G21
+ *
+ * @param <K> Key type
+ * @param <V> Value type
+ * @author Shruthi(sxn145130) Tejasvee(txb140830)
  */
 public interface HashMapIfc<K, V> {
 
