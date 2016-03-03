@@ -3,8 +3,11 @@ package lp0;
 import common.Utility;
 import sp2.Edge;
 import sp2.Graph;
+import sp2.GraphAlgorithms;
 import sp2.Vertex;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import static java.lang.System.exit;
@@ -14,15 +17,25 @@ public class Solution {
     public static int numEdges;
     private static Vertex masterSrc;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        Scanner in;
+        if (args.length > 0) {
+            File inputFile = new File(args[0]);
+            in = new Scanner(inputFile);
+        } else {
+            in = new Scanner(System.in);
+        }
+
         if (args.length != 1) {
             System.out.println("Please provide the file path");
             exit(1);
         }
 
-        String path = args[0];
-        Graph g = Utility.getGraph(path);
-
+        Graph g = Utility.getGraph(in);
+        if (GraphAlgorithms.testEulerian(g) == -1) {
+            System.out.println("Graph is not Eulerian");
+            return;
+        }
 
         System.out.println("Entered");
         List<Edge> eulerTour = findEulerTour(g);
@@ -30,22 +43,18 @@ public class Solution {
             System.out.println(e);
         }
 
-
-//        System.out.println("Is it a valid Euler tour? " + verifyTour(eulerTour.next, masterSrc));
-//        System.out.println("Time taken to find the Euler tour : " + (end - start) + "ms");
     }
 
     static List<Edge> findEulerTour(Graph g) {
         long start = System.currentTimeMillis();
         Node root = getRoot(g);
         long end = System.currentTimeMillis();
-//        System.out.println((end - start) + "ms");
+        System.out.println("Total time taken: " + (end - start) + "ms");
         List<Edge> tour = new ArrayList<>();
         Node s = root.next;
         while (s != null) {
             tour.add(s.edge);
             s = s.next;
-
         }
         return tour;
     }
@@ -86,6 +95,9 @@ public class Solution {
                 mergeNode.next = nextLink;
             }
         }
+        if (verifyTour(g, root.next, masterSrc)) {
+            System.out.println("Euler Tour/ Path is correct");
+        }
         return root;
     }
 
@@ -99,15 +111,17 @@ public class Solution {
         hm.put(masterSrc, root);
         while (!q.isEmpty() && root.size != numEdges) {
             Vertex src = q.iterator().next();
+            if (masterSrc.degree != 0) {
+                src = masterSrc;
+            }
             q.remove(src);
             Vertex vertex = src;
             Node mergeNode = hm.get(vertex);
             Node nextLink = mergeNode.next;
             do {
-                if (!q.contains(vertex) && vertex.degree == 0)
-                    break;
+                Edge edge = null;
                 if (vertex.degree > 0) {
-                    Edge edge = vertex.getNextEdge();
+                    edge = vertex.getNextEdge();
                     edge.seen = true;
                     vertex.degree--;
                     vertex = edge.otherEnd(vertex);
@@ -120,6 +134,10 @@ public class Solution {
                 } else {
                     q.remove(vertex);
 
+                }
+                if (vertex.degree == 0) {
+                    q.remove(vertex);
+                    break;
                 }
             } while ((vertex != src) && root.size != numEdges);
             mergeNode.next = nextLink;

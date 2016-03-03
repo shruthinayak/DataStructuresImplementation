@@ -35,6 +35,12 @@ public class Utility {
         }
     }
 
+    public static Graph getGraph(Scanner in) {
+        Graph graph;
+
+        graph = Graph.createGraphFromUserInput(in, false);
+        return graph;
+    }
     public static Graph getGraph(String path) {
         Graph graph;
 
