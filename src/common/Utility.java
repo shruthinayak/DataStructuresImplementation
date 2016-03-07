@@ -35,17 +35,18 @@ public class Utility {
         }
     }
 
-    public static Graph getGraph(Scanner in) {
+    public static Graph getGraph(Scanner in, boolean directed) {
         Graph graph;
 
-        graph = Graph.createGraphFromUserInput(in, false);
+        graph = Graph.createGraphFromUserInput(in, directed);
         return graph;
     }
-    public static Graph getGraph(String path) {
+
+    public static Graph getGraph(String path, boolean directed) {
         Graph graph;
 
         try {
-            graph = Graph.createGraphFromUserInput(new Scanner(new File(path)), false);
+            graph = getGraph(new Scanner(new File(path)), directed);
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
             return null;
