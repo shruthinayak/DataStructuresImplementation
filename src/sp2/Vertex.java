@@ -12,6 +12,7 @@ import java.util.List;
 public class Vertex implements Index {
     public int name; // name of the vertex
     public boolean seen; // flag to check if the vertex has already been visited
+    public boolean strong; //flag to keep track of
     public Vertex parent; // parent of the vertex
     public int distance; // distance to the vertex from the source vertex
     public List<Edge> Adj, revAdj; // adjacency list; use MyLinkedList or
@@ -20,6 +21,7 @@ public class Vertex implements Index {
     public int index;
     public HashSet<Edge> AdjHashSet;
     public int countEdge;
+    public int component;
 
 
     /**
@@ -36,6 +38,8 @@ public class Vertex implements Index {
         degree = n == 0 ? -1 : 0;
         AdjHashSet = new HashSet<>();
         countEdge = 0;
+        strong = false;
+        component = name;
 
     }
 

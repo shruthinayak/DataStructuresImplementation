@@ -9,6 +9,7 @@ public class Edge {
     public Vertex From; // tail vertex
     public Vertex To; // head vertex
     public int weight;// weight of the arc
+    public int component; // which component the edge belongs to of the vertex
 
     /**
      * Constructor for Edge
@@ -25,6 +26,7 @@ public class Edge {
         From = u;
         To = v;
         weight = w;
+        component = -1;
 
     }
 
