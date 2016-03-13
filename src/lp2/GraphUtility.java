@@ -4,15 +4,14 @@ import sp2.Edge;
 import sp2.Graph;
 import sp2.Vertex;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by shruthi on 5/3/16.
  */
 public class GraphUtility {
-    static HashSet<String> edges = new HashSet<>();
+    static HashSet<Edge> edges = new HashSet<>();
+
     static void DFS(Vertex v, List<Vertex> s, List<Vertex> output,
                     boolean useReverse, int component, boolean print) {
 
@@ -27,9 +26,9 @@ public class GraphUtility {
                 Vertex u = e.otherEnd(v);
                 if (!u.seen && !u.strong) {
                     if (print) {
-                        edges.add(e.toString());
+                        edges.add(e);
 
-                        System.out.println(e.toString());
+                        //System.out.println(e.toString());
                     }
                     DFS(u, s, output, useReverse, component, print);
 
@@ -44,6 +43,46 @@ public class GraphUtility {
         }
 
     }
+
+
+    static void DFS2(Vertex v, List<Vertex> s, List<Vertex> output,
+                     boolean useReverse, int component, boolean print) {
+        List<Vertex> nodesToVisit = new LinkedList<>();
+        nodesToVisit.add(v);
+        boolean flag = false;
+        while (!nodesToVisit.isEmpty()) {
+            Vertex currentNode = nodesToVisit.get(0);
+            currentNode.seen = true;
+            currentNode.component = component;
+            List<Edge> edgeSet = useReverse ? currentNode.revAdj : currentNode.Adj;
+            Vertex u = null;
+            for (Edge e : edgeSet) {
+                if (e.weight == 0) {
+                    e.component = component;
+                    u = e.otherEnd(currentNode);
+                    if (!u.seen && !u.strong) {
+                        if (print) {
+                            edges.add(e);
+                            //System.out.println(e.toString());
+                        }
+                        nodesToVisit.add(0, u);
+                        flag = true;
+                        break;
+//                    DFS2(u, s, output, useReverse, component, print);
+
+                    }
+                }
+            }
+            if (flag) {
+                flag = false;
+            } else {
+                output.add(0, currentNode);
+                nodesToVisit.remove(0);
+            }
+
+        }
+    }
+
 
     /**
      * Method returns the number of strongly connected components for a directed
@@ -62,7 +101,7 @@ public class GraphUtility {
         for (Vertex v : output) {
             o = new LinkedList<>();
             if (!v.seen) {
-                DFS(v, s, o, true, v.name, false);
+                DFS2(v, s, o, true, v.name, false);
                 if (o.size() > 1) {
                     cycles.add(o);
                 }
@@ -96,7 +135,7 @@ public class GraphUtility {
         List<Vertex> vs = g.verts;
         for (Vertex v : vs) {
             if (!v.seen && !v.strong && v.name != 0) {
-                DFS(v, s, o, false, v.name, false);
+                DFS2(v, s, o, false, v.name, false);
             }
         }
 
