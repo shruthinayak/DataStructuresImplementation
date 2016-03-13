@@ -1,10 +1,8 @@
 package lp2;
 
-import sp2.Edge;
-import sp2.Graph;
-import sp2.Vertex;
-
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by shruthi on 5/3/16.
@@ -45,11 +43,11 @@ public class GraphUtility {
     }
 
 
-    static void DFS2(Vertex v, List<Vertex> s, List<Vertex> output,
+    static void DFS2(Vertex v, List<Vertex> output,
                      boolean useReverse, int component, boolean print) {
         List<Vertex> nodesToVisit = new LinkedList<>();
         nodesToVisit.add(v);
-        boolean flag = false;
+        boolean completed = false;
         while (!nodesToVisit.isEmpty()) {
             Vertex currentNode = nodesToVisit.get(0);
             currentNode.seen = true;
@@ -57,25 +55,22 @@ public class GraphUtility {
             List<Edge> edgeSet = useReverse ? currentNode.revAdj : currentNode.Adj;
             Vertex u = null;
             for (Edge e : edgeSet) {
+                completed = true;
                 if (e.weight == 0) {
                     e.component = component;
                     u = e.otherEnd(currentNode);
                     if (!u.seen && !u.strong) {
                         if (print) {
                             edges.add(e);
-                            //System.out.println(e.toString());
                         }
                         nodesToVisit.add(0, u);
-                        flag = true;
+                        completed = false;
                         break;
-//                    DFS2(u, s, output, useReverse, component, print);
-
                     }
                 }
             }
-            if (flag) {
-                flag = false;
-            } else {
+
+            if (completed) {
                 output.add(0, currentNode);
                 nodesToVisit.remove(0);
             }
@@ -95,17 +90,14 @@ public class GraphUtility {
         resetSeen(g);
         List<List<Vertex>> cycles = new LinkedList<>();
         List<Vertex> output = topologicalOrderUsingDFS(g);
-        List<Vertex> s = new LinkedList<>();
-        List<Vertex> o = new LinkedList<>();
         resetSeen(g);
         for (Vertex v : output) {
-            o = new LinkedList<>();
+            List<Vertex> o = new LinkedList<>();
             if (!v.seen) {
-                DFS2(v, s, o, true, v.name, false);
+                DFS2(v, o, true, v.name, false);
                 if (o.size() > 1) {
                     cycles.add(o);
                 }
-//                System.out.println("Component " + conn + ":" + o.toString());
             }
         }
 
@@ -115,6 +107,12 @@ public class GraphUtility {
     public static void resetSeen(Graph g) {
         for (Vertex v : g.verts) {
             v.seen = false;
+        }
+    }
+
+    public static void resetStrong(Graph g) {
+        for (Vertex v : g.verts) {
+            v.strong = false;
         }
     }
 
@@ -130,12 +128,11 @@ public class GraphUtility {
 		 * which they finish. Write code without using global variables.
 		 */
         resetSeen(g);
-        List<Vertex> s = new LinkedList<>();
         List<Vertex> o = new LinkedList<>();
         List<Vertex> vs = g.verts;
         for (Vertex v : vs) {
             if (!v.seen && !v.strong && v.name != 0) {
-                DFS2(v, s, o, false, v.name, false);
+                DFS2(v, o, false, v.name, false);
             }
         }
 
