@@ -66,8 +66,6 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         Edge e = new Edge(u, v, weight);
         u.Adj.add(e);
         v.Adj.add(e);
-        u.AdjHashSet.add(e);
-        v.AdjHashSet.add(e);
         u.degree++;
         v.degree++;
     }
@@ -88,7 +86,6 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         Edge e = new Edge(tail, head, weight);
         tail.Adj.add(e);
         head.revAdj.add(e);
-        head.pq.add(e);
         head.degree++;
     }
 

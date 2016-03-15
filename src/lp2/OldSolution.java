@@ -1,7 +1,5 @@
 package lp2;
 
-import common.Utility;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -15,9 +13,9 @@ public class OldSolution {
 
     public static void main(String[] args) throws FileNotFoundException {
         //Scanner read = new Scanner(System.in);
-        String path = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp2-data/3-lp2.txt";
-        Graph g = Utility.getGraph(path, true);
-
+        String path = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp2-data/0-lp2.txt";
+        Graph g = GraphUtility.getGraph(path, true);
+        boolean print = g.numNodes <= 50;
         Vertex root = GraphUtility.getRoot(g, 1);
         reduceToZero(g, root);
         boolean isMst; //if false, there exists a cycle
@@ -29,7 +27,13 @@ public class OldSolution {
                 }
             }
         } while (!isMst);
+
         System.out.println(mstWeight);
+        if (print) {
+            for (Edge e : GraphUtility.edges)
+                System.out.println(e.toString());
+        }
+
     }
 
     private static void initAnswerFile(String path) throws FileNotFoundException {
@@ -63,13 +67,12 @@ public class OldSolution {
         List<Vertex> o = new LinkedList<>();
         GraphUtility.resetStrong(g);
         GraphUtility.resetSeen(g);
-        GraphUtility.DFS2(root, o, false, root.name, print);
+        GraphUtility.DFS(root, o, false, root.name, print);
 
         for (Vertex v : o) {
             v.strong = true;
         }
         if (o.size() == g.numNodes) {
-            System.out.println("Before:" + mstWeight);
             mstWeight = 0;
             for (Edge e : GraphUtility.edges)
                 mstWeight += e.actualWeight;
