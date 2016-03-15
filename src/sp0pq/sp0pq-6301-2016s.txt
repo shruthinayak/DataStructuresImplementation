@@ -1,0 +1,20 @@
+
+CS 6301.002.  Implementation of advanced data structures and algorithms
+Spring 2016
+Short Project 0pq (Priority Queues)
+Thu, Feb 4, 2016
+
+Ver 1.0: Initial description (Feb 4, 8:00 AM).
+Ver 1.1: Zip file with simpler index (Feb 11, 8:00 AM).
+
+Due: 11:59 PM, Sun, Feb 14 (was Feb 11).
+
+This is an OPTIONAL project.
+
+Code base: http://www.utdallas.edu/~rbk/teach/2016s/java/pq-1.1.zip
+	(Ver 1.0: was http://www.utdallas.edu/~rbk/teach/2016s/java/pq.zip)
+
+1. Implement BinaryHeap
+2. Implement IndexedHeap and Prim's MST algorithm (MST.java)
+3. Compare the running times of Prim1 (priority queue of edges)
+   and Prim2 (indexed priority queue of vertices).
