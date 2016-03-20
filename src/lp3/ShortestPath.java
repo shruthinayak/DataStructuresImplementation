@@ -5,17 +5,9 @@ package lp3;
  */
 public interface ShortestPath {
 
-    void getShortestPath(Graph g, Vertex src);
+    int INF = Integer.MAX_VALUE;
+
+    void getShortestPath();
 
     void print();
-
-    class ShortestPathObj {
-        Vertex n;
-        Vertex predecessor;
-        long pathLength;
-
-        public String toString() {
-            return n.name + " " + predecessor.name + " " + pathLength;
-        }
-    }
 }

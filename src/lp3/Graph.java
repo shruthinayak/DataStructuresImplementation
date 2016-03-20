@@ -129,6 +129,21 @@ public class Graph implements Iterable<Vertex>, Cloneable {
     }
 
     /**
+     * Returns the root vertex given a name.
+     * @param name int: name of the root vertex
+     * @return Vertex: Returns the root vertex.
+     */
+
+    public Vertex getRoot(int name) {
+        for (Vertex v : verts) {
+            if (v.name == name)
+                return v;
+
+        }
+        return null;
+    }
+
+    /**
      * A Custom Iterator Class for iterating through the vertices in a graph
      *
      */
