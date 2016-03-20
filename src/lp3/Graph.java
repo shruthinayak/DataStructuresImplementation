@@ -3,6 +3,8 @@
  */
 package lp3;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Graph implements Iterable<Vertex>, Cloneable {
@@ -45,6 +47,24 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         }
         in.close();
         return g;
+    }
+
+    public static Graph getGraph(Scanner in, boolean directed) {
+        Graph graph;
+        graph = Graph.createGraphFromUserInput(in, directed);
+        return graph;
+    }
+
+    public static Graph getGraph(String path, boolean directed) {
+        Graph graph;
+
+        try {
+            graph = getGraph(new Scanner(new File(path)), directed);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+            return null;
+        }
+        return graph;
     }
 
     /**
