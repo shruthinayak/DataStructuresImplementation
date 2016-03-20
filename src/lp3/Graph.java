@@ -11,8 +11,11 @@ public class Graph implements Iterable<Vertex>, Cloneable {
 
     public List<Vertex> verts; // array of vertices
     public int numNodes; // number of verices in the graph
-
+    public boolean positive = true;
+    public boolean uniform = true;
+    public int uniformWt;
     public HashMap<Vertex, Integer> vertexToMap;
+    private List<Vertex> topologicalOrder;
 
     /**
      * Constructor for Graph
@@ -52,6 +55,7 @@ public class Graph implements Iterable<Vertex>, Cloneable {
     public static Graph getGraph(Scanner in, boolean directed) {
         Graph graph;
         graph = Graph.createGraphFromUserInput(in, directed);
+
         return graph;
     }
 
@@ -70,12 +74,9 @@ public class Graph implements Iterable<Vertex>, Cloneable {
     /**
      * Method to add an edge to the graph
      *
-     * @param a
-     *            : int - one end of edge
-     * @param b
-     *            : int - other end of edge
-     * @param weight
-     *            : int - the weight of the edge
+     * @param a      : int - one end of edge
+     * @param b      : int - other end of edge
+     * @param weight : int - the weight of the edge
      */
     void addEdge(int a, int b, int weight) {
         Vertex u = verts.get(a);
@@ -90,12 +91,9 @@ public class Graph implements Iterable<Vertex>, Cloneable {
     /**
      * Method to add an arc (directed edge) to the graph
      *
-     * @param a
-     *            : int - the head of the arc
-     * @param b
-     *            : int - the tail of the arc
-     * @param weight
-     *            : int - the weight of the arc
+     * @param a      : int - the head of the arc
+     * @param b      : int - the tail of the arc
+     * @param weight : int - the weight of the arc
      */
     void addDirectedEdge(int a, int b, int weight) {
         Vertex tail = verts.get(a);
@@ -108,7 +106,49 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         if (vertexToMap.containsKey(head)) {
             count = vertexToMap.get(head);
         }
+        if (uniformWt == 0)
+            uniformWt = weight;
+        if (uniform && uniformWt != weight)
+            uniform = false;
+        if (positive && weight < 0)
+            positive = false;
         vertexToMap.put(head, count);
+
+    }
+
+    /**
+     * Method returns the topological order of the vertices in the directed
+     * graph.
+     *
+     * @return List that contains the topological order
+     */
+    public void computeTopologicalOrder() {
+
+        resetSeen();
+        topologicalOrder = new ArrayList<>();
+        Queue<Vertex> queue = new LinkedList<>();
+
+        for (Vertex v : verts) {
+            if (v.degree == 0) {
+                queue.add(v);
+                break;
+            }
+        }
+        while (queue.size() != 0) {
+            Vertex u = queue.remove();
+            topologicalOrder.add(u);
+            for (Edge e : u.Adj) {
+                Vertex v = e.otherEnd(u);
+                v.degree--;
+                if (v.degree == 0) {
+                    queue.add(v);
+                }
+            }
+        }
+        if (topologicalOrder.size() != numNodes) {
+            topologicalOrder = null;
+        }
+
     }
 
     /**
@@ -130,6 +170,7 @@ public class Graph implements Iterable<Vertex>, Cloneable {
 
     /**
      * Returns the root vertex given a name.
+     *
      * @param name int: name of the root vertex
      * @return Vertex: Returns the root vertex.
      */
@@ -143,16 +184,26 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         return null;
     }
 
+    public void resetSeen() {
+        for (Vertex v : verts) {
+            v.seen = false;
+        }
+    }
+
+    public List<Vertex> getTopologicalOrder() {
+        if (topologicalOrder == null)
+            computeTopologicalOrder();
+        return topologicalOrder;
+    }
+
     /**
      * A Custom Iterator Class for iterating through the vertices in a graph
-     *
      */
     private class VertexIterator implements Iterator<Vertex> {
         private Iterator<Vertex> it;
 
         /**
          * Constructor for VertexIterator
-         *
          */
         private VertexIterator() {
             it = verts.iterator();
@@ -181,7 +232,6 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         public void remove() {
             throw new UnsupportedOperationException();
         }
-
 
     }
 }

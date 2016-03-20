@@ -33,28 +33,21 @@ public class Dijkstra implements ShortestPath {
         while (!vertexSet.isEmpty()) {
             Vertex u = getMinPathVertex(vertexSet);
             vertexSet.remove(u);
-            int dist = -1;
-            int x = 0;
             if (u != null) {
                 for (Edge e : u.Adj) {
                     Vertex v = e.otherEnd(u);
-                    x = v.distance;
                     int alt = u.distance + e.weight;
                     if (alt < v.distance) {
+                        if (v.distance != INF)
+                            totalPath -= v.distance;
                         v.distance = alt;
                         v.parent = u;
-                        dist = alt;
+                        totalPath += v.distance;
                     }
                 }
-                if (dist == -1)
-                    dist = x;
             } else {
                 vertexSet.clear();
             }
-
-            System.out.println(u.name + " " + dist);
-            totalPath += dist;
-
         }
     }
 
