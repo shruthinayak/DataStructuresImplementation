@@ -21,6 +21,8 @@ public class Vertex implements Index {
     public int index;
     public int countEdge;
     public int component;
+    public long pathLength;
+    public int count;
 
 
     /**
@@ -38,6 +40,8 @@ public class Vertex implements Index {
         countEdge = 0;
         strong = false;
         component = name;
+        pathLength = Integer.MAX_VALUE;
+        count = 0;
 
     }
 

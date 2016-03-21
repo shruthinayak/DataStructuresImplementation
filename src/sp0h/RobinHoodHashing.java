@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Group 21
- * Authors:
- * Shruthi Ramesh Nayak - sxn145130
- * Tejasvee Bolisetty - txb140830
+ * G21
+ *
+ * @param <K> Key type
+ * @param <V> Value type
+ * @author Shruthi(sxn145130) Tejasvee(txb140830)
  */
 
 public class RobinHoodHashing<K, V> implements HashMapIfc<K, V> {
@@ -54,29 +55,37 @@ public class RobinHoodHashing<K, V> implements HashMapIfc<K, V> {
         int i = 0;
         int tableIndex = getIndex(key, index);
         if (tableIndex != -1) {
+            values[tableIndex] = value;
+        } else {
             while (i < tableSize) {
-                if (keys[index + i] == null) { // if location is free for that index
-                    values[index + i] = value;
-                    probe[index + i] = i;
+                int keyIndex = (index + i) % tableSize;
+                if (keys[keyIndex] == null) { // if location is free for that index
+                    values[keyIndex] = value;
+                    probe[keyIndex] = i;
+                    keys[keyIndex] = key;
+                    keySet.add(key);
+                    k++;
+                    return;
                 } else { // if it is occupied with other element, compare probe length with existing key
-                    int probeExist = probe[index + i];
+                    int probeExist = probe[keyIndex];
                     if (i > probeExist) {
-                        K existKey = keys[index + i];
-                        V existVal = values[index + i];
-                        keys[index + i] = key;
-                        values[index + i] = value;
-                        probe[index + i] = i;
+                        K existKey = keys[keyIndex];
+                        V existVal = values[keyIndex];
+                        keys[keyIndex] = key;
+                        values[keyIndex] = value;
+                        probe[keyIndex] = i;
+                        keySet.add(key);
+                        k++;
                         if (i > maxProbe) {
                             maxProbe = i;
                         }
                         reinsert(existKey, existVal, probeExist);
+                        return;
                     } else {
                         i++;
                     }
                 }
             }
-        } else {
-            values[index] = value;
         }
 
     }
@@ -107,11 +116,13 @@ public class RobinHoodHashing<K, V> implements HashMapIfc<K, V> {
      */
     public int getIndex(K key, int index) {
         int i = 0;
-        while (i <= maxProbe && probe[index + i] != -2) { // compares with probe whether it has to move forward to check with other position if the position was deleted
-            if (keys[index + i] != null && keys[index + 1].equals(key)) {
-                return index + i;
+        int keyIndex = (index + i) % tableSize;
+        while (i <= maxProbe && probe[keyIndex] != -2) { // compares with probe whether it has to move forward to check with other position if the position was deleted
+            if (keys[keyIndex] != null && keys[keyIndex].equals(key)) {
+                return keyIndex;
             }
             i++;
+            keyIndex = (index + i) % tableSize;
         }
         return -1;
 
@@ -140,9 +151,16 @@ public class RobinHoodHashing<K, V> implements HashMapIfc<K, V> {
     }
 
     @Override
-    public Set keySet() {
-        return null;
+    public Set<K> keySet() {
+        for (K key : keys) {
+            if (key != null)
+                keySet.add(key);
+        }
+        return keySet;
     }
+//    public Set keySet() {
+//        return null;
+//    }
 
     public void resize() {
         RobinHoodHashing<K, V> newTable = new RobinHoodHashing<>(tableSize * 2);
@@ -154,6 +172,7 @@ public class RobinHoodHashing<K, V> implements HashMapIfc<K, V> {
         keys = newTable.keys;
         values = newTable.values;
         keySet = keySet();
+        this.probe = newTable.probe;
 
     }
 }

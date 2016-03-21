@@ -7,16 +7,14 @@ package sp2;
 
 import lp0.Solution;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Graph implements Iterable<Vertex>, Cloneable {
 
     public List<Vertex> verts; // array of vertices
     public int numNodes; // number of verices in the graph
 
+    public HashMap<Vertex, Integer> vertexToMap;
     /**
      * Constructor for Graph
      *
@@ -25,6 +23,7 @@ public class Graph implements Iterable<Vertex>, Cloneable {
     Graph(int size) {
         numNodes = size;
         verts = new ArrayList<>(size + 1);
+        vertexToMap = new HashMap<>();
         verts.add(0, new Vertex(0));
         // create an array of Vertex objects
         for (int i = 1; i <= size; i++)
@@ -91,6 +90,11 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         tail.Adj.add(e);
         head.revAdj.add(e);
         head.degree++;
+        int count = 1;
+        if (vertexToMap.containsKey(head)) {
+            count = vertexToMap.get(head);
+        }
+        vertexToMap.put(head, count);
     }
 
     /**

@@ -2,7 +2,6 @@ package sp2;
 
 /**
  * Class that represents an arc in a Graph
- *
  */
 public class Edge {
     public boolean seen;
@@ -10,22 +9,21 @@ public class Edge {
     public Vertex To; // head vertex
     public int weight;// weight of the arc
     public int component; // which component the edge belongs to of the vertex
+    public int actualWeight; // storing the actual edge weight of graph
 
     /**
      * Constructor for Edge
      *
-     * @param u
-	 *            : Vertex - The tail of the arc
-	 * @param v
-	 *            : Vertex - The head of the arc
-	 * @param w
-	 *            : int - The weight associated with the arc
+     * @param u : Vertex - The tail of the arc
+     * @param v : Vertex - The head of the arc
+     * @param w : int - The weight associated with the arc
      */
     Edge(Vertex u, Vertex v, int w) {
         seen = false;
         From = u;
         To = v;
         weight = w;
+        actualWeight = w;
         component = -1;
 
     }
@@ -33,10 +31,8 @@ public class Edge {
     /**
      * Method to find the other end end of the arc given a vertex reference
      *
-     * @param u
-	 *            : Vertex
-     * @return
-     *            : Vertex at the other end of the edge.
+     * @param u : Vertex
+     * @return : Vertex at the other end of the edge.
      */
     public Vertex otherEnd(Vertex u) {
         // if the vertex u is the head of the arc, then return the tail else

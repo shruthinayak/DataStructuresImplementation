@@ -7,9 +7,10 @@ import java.util.Set;
 
 /**
  * G21
- * @author Shruthi(sxn145130) Tejasvee(txb140830)
+ *
  * @param <K> Key type
  * @param <V> Value type
+ * @author Shruthi(sxn145130) Tejasvee(txb140830)
  */
 public class CuckooHashing<K, V> implements HashMapIfc<K, V>/*extends SeparateChaining<K, V>*/ {
     final int retryLimit = 10;
@@ -138,8 +139,10 @@ public class CuckooHashing<K, V> implements HashMapIfc<K, V>/*extends SeparateCh
 
     @Override
     public void delete(K key) {
-        if (hasKey(key)) {
-
+        int index = getIndex(key);
+        if (index != -1) {
+            keys[index] = null;
+            values[index] = null;
         }
     }
 

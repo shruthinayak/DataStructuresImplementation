@@ -31,7 +31,7 @@ public class Solution {
             exit(1);
         }
 
-        Graph g = Utility.getGraph(in);
+        Graph g = Utility.getGraph(in, false);
         if (GraphAlgorithms.testEulerian(g) == -1) {
             System.out.println("Graph is not Eulerian");
             return;

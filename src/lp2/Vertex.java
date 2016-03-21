@@ -12,6 +12,7 @@ public class Vertex {
     public boolean seen; // flag to check if the vertex has already been visited
     public boolean strong; //flag to keep track if it belongs to a cycle already.
     public Vertex parent; // parent of the vertex
+    public boolean processed;
     public int distance; // distance to the vertex from the source vertex
     public List<Edge> Adj, revAdj; // adjacency list; use MyLinkedList or
     // ArrayList
@@ -34,6 +35,7 @@ public class Vertex {
         degree = n == 0 ? -1 : 0;
         countEdge = 0;
         strong = false;
+        processed = false;
         component = name;
 
     }

@@ -5,7 +5,7 @@ package lp3;
  */
 public class Solution {
     public static void main(String[] args) {
-        String baseS = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp3-data/lp3-l1/";
+        String baseS = "lp3-l1/";
         String[] s = {
                 "lp3-l1-in1.txt",
                 "lp3-l1-in2.txt",
@@ -16,7 +16,7 @@ public class Solution {
                 "lp3-l1-in-k3.txt",
                 "lp3-l1-in-k4.txt",
         };
-        String baseB = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp3-big/";
+        String baseB = "lp3-big/";
         String[] b = {
                 "lp3-l1-in-m1.txt",
                 "lp3-l1-in-m2.txt",
@@ -30,18 +30,21 @@ public class Solution {
             System.out.print("\t");
             ShortestPath sp = null;
             if (g.uniform) {
-                //BFS
-                System.out.println("BFS ");
+                sp = new BFS(g, g.getRoot(1));
+                System.out.print("BFS ");
             } else if (g.positive) {
-                System.out.print("Dij ");
                 sp = new Dijkstra(g, g.getRoot(1));
+                System.out.print("Dij ");
             } else if (g.getTopologicalOrder() != null) {
-                System.out.print("DAG ");
                 sp = new DAGShortestPath(g, g.getRoot(1));
+                System.out.print("DAG ");
             } else {
-                System.out.println("Bellman-Ford ");
+                sp = new BellmanFord(g, g.getRoot(1));
                 //Should go as else part of if(sp!=null)
-                System.out.println("OR Unable to solve problem. Graph has a negative cycle");
+                if (sp.getTotalOfShortestPaths() == ShortestPath.INF) {
+                    System.out.println("OR Unable to solve problem. Graph has a negative cycle");
+                } else System.out.print("Bellman-Ford ");
+
                 //Bellman
                 //set sp to null if negative cycle encountered
             }

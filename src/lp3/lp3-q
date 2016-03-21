@@ -12,6 +12,7 @@ Project Description
 
 This project has 2 levels. You are required to complete Level 1, and Level 2 is optional. In the first level, you need to implement the shortest path algorithms discussed in class. No excellence credits will be awarded for submitting level 1. In level 2, you need to output the number of shortest paths from the source s to each node of the graph. If that problem is not solvable because of a negative (or zero) cycle in the graph, then you need to output such a cycle.
 Level 1 (No EC)
+B-F directed graph
 
 Implementation of shortest path algorithms: BFS, Dijkstra's algorithm, DAG shortest paths, and Bellman-Ford algorithm. Write a program that behaves as follows: given a directed graph as input, if the graph has uniform weights (i.e., same positive weights for all edges), then it runs BFS to find shorest paths. Otherwise, if the graph is a directed, acyclic graph (DAG), then it runs DAG shortest paths. Otherwise, if the graph has only nonnegative weights, then it runs Dijkstra's algorithm. If all these test fail, then it runs the Bellman-Ford algorithm. If the graph has negative cycles, then it prints the message "Unable to solve problem. Graph has a negative cycle".
 Level 2 (EC: 1.0)
