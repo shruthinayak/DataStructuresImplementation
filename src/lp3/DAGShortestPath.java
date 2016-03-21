@@ -57,5 +57,10 @@ public class DAGShortestPath implements ShortestPath {
         }
     }
 
+    @Override
+    public int getTotalOfShortestPaths() {
+        return totalPath;
+    }
+
 
 }

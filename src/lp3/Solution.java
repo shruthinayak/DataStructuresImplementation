@@ -21,7 +21,7 @@ public class Solution {
                 "lp3-l1-in-m1.txt",
                 "lp3-l1-in-m2.txt",
                 "lp3-l1-in-m3.txt",
-                "lp3-l1-in-m4.txt",
+                "lp3-l1-in-m4.txt"
         };
 
         for (String path : b) {
@@ -31,15 +31,15 @@ public class Solution {
             ShortestPath sp = null;
             if (g.uniform) {
                 //BFS
-                System.out.println("BFS");
+                System.out.println("BFS ");
             } else if (g.positive) {
-                System.out.println("Dij");
+                System.out.print("Dij ");
                 sp = new Dijkstra(g, g.getRoot(1));
             } else if (g.getTopologicalOrder() != null) {
-                System.out.println("DAG");
+                System.out.print("DAG ");
                 sp = new DAGShortestPath(g, g.getRoot(1));
             } else {
-                System.out.println("Bellman-Ford");
+                System.out.println("Bellman-Ford ");
                 //Should go as else part of if(sp!=null)
                 System.out.println("OR Unable to solve problem. Graph has a negative cycle");
                 //Bellman
@@ -48,8 +48,11 @@ public class Solution {
 
 
             if (sp != null) {
+                long start = System.currentTimeMillis();
                 sp.getShortestPath();
-//                sp.print();
+                System.out.println(sp.getTotalOfShortestPaths());
+                System.out.println(System.currentTimeMillis() - start + "ms");
+                //sp.print();
             }
         }
 

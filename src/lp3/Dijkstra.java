@@ -77,4 +77,9 @@ public class Dijkstra implements ShortestPath {
                 }
         }
     }
+
+    @Override
+    public int getTotalOfShortestPaths() {
+        return totalPath;
+    }
 }

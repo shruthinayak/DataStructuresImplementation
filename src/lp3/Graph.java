@@ -131,7 +131,6 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         for (Vertex v : verts) {
             if (v.degree == 0) {
                 queue.add(v);
-                break;
             }
         }
         while (queue.size() != 0) {
