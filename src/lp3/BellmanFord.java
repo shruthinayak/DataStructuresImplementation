@@ -19,7 +19,7 @@ public class BellmanFord implements ShortestPath {
         this.src = src;
     }
 
-    public boolean getCycle() {
+    public boolean isCycle() {
         return cycle;
     }
 

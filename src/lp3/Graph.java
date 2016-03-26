@@ -15,6 +15,7 @@ public class Graph implements Iterable<Vertex>, Cloneable {
     public boolean uniform = true;
     public int uniformWt;
     public HashMap<Vertex, Integer> vertexToMap;
+    public List<Edge> edges;
     private List<Vertex> topologicalOrder;
 
     /**
@@ -30,6 +31,7 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         // create an array of Vertex objects
         for (int i = 1; i <= size; i++)
             verts.add(i, new Vertex(i));
+        edges = new ArrayList<>();
     }
 
     public static Graph createGraphFromUserInput(Scanner in, boolean directed) {
@@ -113,6 +115,7 @@ public class Graph implements Iterable<Vertex>, Cloneable {
         if (positive && weight < 0)
             positive = false;
         vertexToMap.put(head, count);
+        edges.add(e);
 
     }
 

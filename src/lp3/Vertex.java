@@ -6,7 +6,6 @@ package lp3;
 import sp0pq.Index;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class Vertex implements Index {
@@ -23,6 +22,7 @@ public class Vertex implements Index {
     public int component;
     public long pathLength;
     public int count;
+    public int tsp; //total shortest paths to this vertex
 
 
     /**

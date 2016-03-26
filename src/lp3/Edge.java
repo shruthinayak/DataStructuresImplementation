@@ -10,7 +10,7 @@ public class Edge {
     public int weight;// weight of the arc
     public int component; // which component the edge belongs to of the vertex
     public int actualWeight; // storing the actual edge weight of graph
-
+    public boolean D;
     /**
      * Constructor for Edge
      *
