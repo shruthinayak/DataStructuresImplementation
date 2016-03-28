@@ -5,9 +5,10 @@ import java.util.List;
 
 public class DAGShortestPath implements ShortestPath {
 
+    public int totalPath = 0;
+    public String name = "DAG";
     Graph g;
     Vertex src;
-    int totalPath = 0;
 
     DAGShortestPath(Graph g, Vertex src) {
         this.g = g;
@@ -44,22 +45,13 @@ public class DAGShortestPath implements ShortestPath {
     }
 
     @Override
-    public void print() {
-        System.out.println("DAG " + totalPath);
-        System.out.println(src.name + " " + src.distance + " -");
-        for (Vertex v : g) {
-            if (v != src)
-                if (v.name != 0 && v.distance < INF) {
-                    System.out.println(v.name + " " + v.distance + " " + v.parent.name);
-                } else {
-                    System.out.println(v.name + " INF -");
-                }
-        }
+    public int getTotalOfShortestPaths() {
+        return totalPath;
     }
 
     @Override
-    public int getTotalOfShortestPaths() {
-        return totalPath;
+    public String getName() {
+        return name;
     }
 
 

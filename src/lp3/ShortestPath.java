@@ -9,7 +9,7 @@ public interface ShortestPath {
 
     void getShortestPath();
 
-    void print();
-
     int getTotalOfShortestPaths();
+
+    String getName();
 }

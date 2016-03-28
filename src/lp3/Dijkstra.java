@@ -5,9 +5,10 @@ import java.util.Set;
 
 public class Dijkstra implements ShortestPath {
 
+    public int totalPath = 0;
     Graph g;
     Vertex src;
-    int totalPath = 0;
+    String name = "Dij";
 
     Dijkstra(Graph g, Vertex src) {
         this.g = g;
@@ -63,23 +64,13 @@ public class Dijkstra implements ShortestPath {
         return minVertex;
     }
 
-
-    @Override
-    public void print() {
-        System.out.println("Dij " + totalPath);
-        System.out.println(src.name + " " + src.distance + " -");
-        for (Vertex v : g) {
-            if (v != src)
-                if (v.name != 0 && v.distance < INF) {
-                    System.out.println(v.name + " " + v.distance + " " + v.parent.name);
-                } else {
-                    System.out.println(v.name + " INF -");
-                }
-        }
-    }
-
     @Override
     public int getTotalOfShortestPaths() {
         return totalPath;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

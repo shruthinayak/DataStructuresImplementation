@@ -8,10 +8,10 @@ import java.util.Queue;
  */
 public class BellmanFord implements ShortestPath {
 
-
     public boolean cycle = false;
+    public int totalPath = 0;
+    public String name = "B-F";
     Graph g;
-    int totalPath = 0;
     Vertex src;
 
     BellmanFord(Graph g, Vertex src) {
@@ -67,30 +67,16 @@ public class BellmanFord implements ShortestPath {
         }
     }
 
-    @Override
-    public void print() {
-        if (cycle) {
-            System.out.println("Unable to solve problem. Graph has a negative cycle");
-        }
-        System.out.println("B-F " + totalPath);
-        for (Vertex s : g.verts) {
-            if (s.name != 0) {
-                if (s != src) {
-                    if (s.parent != null) {
-                        System.out.println(s + " " + s.distance + " " + s.parent);
-                    } else {
-                        System.out.println(s + " INF -");
-                    }
-                } else
-                    System.out.println(s + " " + s.distance + " -");
-            }
-        }
-    }
 
     @Override
     public int getTotalOfShortestPaths() {
         if (cycle) return INF;
         return totalPath;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
 

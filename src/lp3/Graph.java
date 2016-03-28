@@ -74,6 +74,67 @@ public class Graph implements Iterable<Vertex>, Cloneable {
     }
 
     /**
+     * Method uses DFS on the directed graph to find the topological order.
+     *
+     * @param g Directed graph
+     * @return Stack that contains the topological order in the reverse order
+     */
+    public static List<Vertex> topologicalOrderUsingDFS(Graph g) {
+        /*
+         * Algorithm 2. Run DFS on g and push nodes to a stack in the order in
+		 * which they finish. Write code without using global variables.
+		 */
+        resetSeen(g);
+        List<Vertex> o = new LinkedList<>();
+        List<Vertex> vs = g.verts;
+        for (Vertex v : vs) {
+            if (!v.seen && !v.strong && v.name != 0) {
+                DFS(v, o, false, v.name, false);
+            }
+        }
+
+        return o;
+    }
+
+    public static void resetSeen(Graph g) {
+        for (Vertex v : g.verts) {
+            v.seen = false;
+        }
+    }
+
+    static void DFS(Vertex v, List<Vertex> output,
+                    boolean useReverse, int component, boolean print) {
+        List<Vertex> nodesToVisit = new LinkedList<>();
+        nodesToVisit.add(v);
+        boolean completed = false;
+        while (!nodesToVisit.isEmpty()) {
+            Vertex currentNode = nodesToVisit.get(0);
+            currentNode.seen = true;
+            currentNode.component = component;
+            List<Edge> edgeSet = useReverse ? currentNode.revAdj : currentNode.Adj;
+            Vertex u = null;
+            completed = true;
+            for (Edge e : edgeSet) {
+                if (e.weight == 0) {
+                    e.component = component;
+                    u = e.otherEnd(currentNode);
+                    if (!u.seen && !u.strong) {
+                        nodesToVisit.add(0, u);
+                        completed = false;
+                        break;
+                    }
+                }
+            }
+
+            if (completed) {
+                output.add(0, currentNode);
+                nodesToVisit.remove(0);
+            }
+
+        }
+    }
+
+    /**
      * Method to add an edge to the graph
      *
      * @param a      : int - one end of edge

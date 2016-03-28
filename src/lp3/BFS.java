@@ -1,7 +1,5 @@
 package lp3;
 
-import lp2.*;
-
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -13,6 +11,7 @@ public class BFS implements ShortestPath {
     Graph g;
     Vertex src;
     int totalPath = 0;
+    String name = "BFS";
 
     BFS(Graph g, Vertex src) {
         this.g = g;
@@ -22,6 +21,10 @@ public class BFS implements ShortestPath {
 
     @Override
     public void getShortestPath() {
+        for (Vertex v : g) {
+            v.distance = INF;
+            v.parent = null;
+        }
         Queue<Vertex> q = new LinkedList<>();
         q.add(src);
         src.parent = src;
@@ -43,44 +46,14 @@ public class BFS implements ShortestPath {
 
     }
 
-
-    @Override
-    public void print() {
-        System.out.println("DAG " + totalPath);
-        System.out.println(src.name + " " + src.distance + " -");
-        for (Vertex v : g) {
-            if (v != src)
-                if (v.name != 0 && v.distance < INF) {
-                    System.out.println(v.name + " " + v.distance + " " + v.parent.name);
-                } else {
-                    System.out.println(v.name + " INF -");
-                }
-        }
-    }
-
     @Override
     public int getTotalOfShortestPaths() {
         return totalPath;
     }
-/*
 
     @Override
-    public void print(Graph g, Vertex src) {
-        System.out.println("BFS " + totalPath);
-        for (Vertex s : g.verts) {
-            if (s.name != 0) {
-                if (s != src) {
-                    if (s.parent != null) {
-                        System.out.println(s + " " + s.distance + " " + s.parent);
-                    } else {
-                        System.out.println(s + " INF -");
-                    }
-                } else
-                    System.out.println(s + " " + s.distance + " -");
-            }
-        }
+    public String getName() {
+        return name;
     }
-
-*/
 
 }
