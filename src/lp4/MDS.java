@@ -1,5 +1,6 @@
 package lp4;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class MDS {
@@ -84,9 +85,11 @@ public class MDS {
             if (key != MAX && key != MIN) {
                 if (longItemTreeMap.get(key).getPrice() > max.getPrice()) {
                     longItemTreeMap.put(MAX, longItemTreeMap.get(key));
+                    max = longItemTreeMap.get(key);
                 }
                 if (longItemTreeMap.get(key).getPrice() < min.getPrice()) {
                     longItemTreeMap.put(MIN, longItemTreeMap.get(key));
+                    min = longItemTreeMap.get(key);
                 }
             }
         }
@@ -127,13 +130,12 @@ public class MDS {
         int count = 0;
         if (descItem.containsKey(des)) {
             List<Item> values = new ArrayList<>();
-            values.addAll(descItem.get(des).values());
-            Collections.sort(values, new PriceComparator());
-            for (Item i : values) {
-                if (i.price > highPrice)
-                    break;
-                if (i.price >= lowPrice && i.price <= highPrice)
-                    count++;
+            for (Map.Entry<Long, Item> itmEntry : descItem.get(des).entrySet()) {
+                if (itmEntry.getKey() != -1L && itmEntry.getKey() != -2L) {
+                    Item itm = itmEntry.getValue();
+                    if (itm.price >= lowPrice && itm.price <= highPrice)
+                        count++;
+                }
             }
         }
         return count;
@@ -141,13 +143,24 @@ public class MDS {
 
     double priceHike(long minid, long maxid, double rate) {
         double netIncrease = 0;
-        for (long key : idItem.tailMap(minid).keySet()) {
-            if (key > maxid)
-                break;
-            Item item = idItem.get(key);
-            double hike = round(item.getPrice() * rate / 100.0);
-            netIncrease += hike;
-            item.setPrice(item.getPrice() + hike);
+        //TODO: rearrange max min
+        if (rate > 0) {
+            for (long key : idItem.tailMap(minid).keySet()) {
+                if (key > maxid)
+                    break;
+                Item item = idItem.get(key);
+                double hike = round(item.getPrice() * rate / 100.0);
+                netIncrease += hike;
+                item.setPrice(round(item.getPrice() + hike));
+                try {
+                    for (int i = 0; i < item.desc.length; i++) {
+//                        if (descItem.get(item.desc[i]).get(MIN) == item || descItem.get(item.desc[i]).get(MAX) == item)
+                        rearrangeMaxMin(item, i);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return netIncrease;
     }
@@ -158,21 +171,51 @@ public class MDS {
 
     int range(double lowPrice, double highPrice) {
         List<Item> values = new ArrayList<>();
+
+        int count = 0;
+        for (Map.Entry<Long, Item> itmEntry : idItem.entrySet()) {
+            Item itm = itmEntry.getValue();
+            if (itm.price >= lowPrice && itm.price <= highPrice) {
+                count++;
+            }
+        }
+        /*
         values.addAll(idItem.values());
         Collections.sort(values, new PriceComparator());
-        int count = 0;
         for (Item i : values) {
             if (i.price > highPrice) {
                 break;
             }
             if (i.price >= lowPrice && i.price <= highPrice)
                 count++;
-        }
+        }*/
         return count;
     }
 
     int samesame() {
-        return 0;
+        HashMap<String, ArrayList<Item>> same = new HashMap<>();
+        for (Item itm : idItem.values()) {
+            BigInteger sum = new BigInteger("0");
+            if (itm.desc.length >= 8) {
+                for (Long des : itm.desc) {
+                    BigInteger temp = new BigInteger(des.toString());
+                    sum = sum.add(temp.multiply(temp));
+                }
+                ArrayList<Item> val = new ArrayList<>();
+                if (same.containsKey(sum.toString())) {
+                    val = same.get(sum.toString());
+                }
+                val.add(itm);
+                same.put(sum.toString(), val);
+            }
+
+        }
+        int count = 0;
+        for (ArrayList<Item> list : same.values()) {
+            count += list.size() > 1 ? list.size() : 0;
+        }
+        return count;
+
     }
 
     void print() {
@@ -188,6 +231,4 @@ public class MDS {
         }
         System.out.println();
     }
-
-
 }
