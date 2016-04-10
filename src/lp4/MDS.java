@@ -1,8 +1,6 @@
 package lp4;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class MDS {
     final long MAX = -1l;
@@ -21,11 +19,12 @@ public class MDS {
             retValue = 0;
             item = idItem.get(id);
             //If desc is empty, then just the price is updated.
+            item.setPrice(price);
             if (size > 0) {
                 removeItemFromDescriptionMap(item);
                 item.setDescription(description, size);
             }
-            item.setPrice(price);
+
         }
 
         for (int i = 0; i < size; i++) {
@@ -125,15 +124,51 @@ public class MDS {
     }
 
     int findPriceRange(long des, double lowPrice, double highPrice) {
-        return 0;
+        int count = 0;
+        if (descItem.containsKey(des)) {
+            List<Item> values = new ArrayList<>();
+            values.addAll(descItem.get(des).values());
+            Collections.sort(values, new PriceComparator());
+            for (Item i : values) {
+                if (i.price > highPrice)
+                    break;
+                if (i.price >= lowPrice && i.price <= highPrice)
+                    count++;
+            }
+        }
+        return count;
     }
 
     double priceHike(long minid, long maxid, double rate) {
-        return 0;
+        double netIncrease = 0;
+        for (long key : idItem.tailMap(minid).keySet()) {
+            if (key > maxid)
+                break;
+            Item item = idItem.get(key);
+            double hike = round(item.getPrice() * rate / 100.0);
+            netIncrease += hike;
+            item.setPrice(item.getPrice() + hike);
+        }
+        return netIncrease;
+    }
+
+    private double round(double value) {
+        return Math.floor((value + 0.000001) * 100) / 100;
     }
 
     int range(double lowPrice, double highPrice) {
-        return 0;
+        List<Item> values = new ArrayList<>();
+        values.addAll(idItem.values());
+        Collections.sort(values, new PriceComparator());
+        int count = 0;
+        for (Item i : values) {
+            if (i.price > highPrice) {
+                break;
+            }
+            if (i.price >= lowPrice && i.price <= highPrice)
+                count++;
+        }
+        return count;
     }
 
     int samesame() {
@@ -153,4 +188,6 @@ public class MDS {
         }
         System.out.println();
     }
+
+
 }

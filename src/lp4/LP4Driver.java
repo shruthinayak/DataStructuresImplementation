@@ -16,6 +16,7 @@ public class LP4Driver {
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner in;
+        args[0] = "/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp4-data/lp4-3-1k.txt";
         if (args.length > 0) {
             in = new Scanner(new File(args[0]));
         } else {
@@ -24,10 +25,10 @@ public class LP4Driver {
         String s;
         double rv = 0;
         description = new long[DLENGTH];
-
+        double temp = 0;
         Timer timer = new Timer();
         MDS mds = new MDS();
-
+        int line = 0;
         while (in.hasNext()) {
             s = in.next();
             if (s.charAt(0) == '#') {
@@ -44,44 +45,55 @@ public class LP4Driver {
                     des = in.nextInt();
                 }
                 description[index] = 0;
-                rv += mds.insert(id, price, description, index);
+                temp = mds.insert(id, price, description, index);
+                rv += temp;
             } else if (s.equals("Find")) {
                 long id = in.nextLong();
-                rv += mds.find(id);
+                temp = mds.find(id);
+                rv += temp;
             } else if (s.equals("Delete")) {
                 long id = in.nextLong();
-                rv += mds.delete(id);
+                temp = mds.delete(id);
+                rv += temp;
             } else if (s.equals("FindMinPrice")) {
                 long des = in.nextLong();
-                rv += mds.findMinPrice(des);
+                temp = mds.findMinPrice(des);
+                rv += temp;
             } else if (s.equals("FindMaxPrice")) {
                 long des = in.nextLong();
-                rv += mds.findMaxPrice(des);
+                temp = mds.findMaxPrice(des);
+                rv += temp;
             } else if (s.equals("FindPriceRange")) {
                 long des = in.nextLong();
                 double lowPrice = in.nextDouble();
                 double highPrice = in.nextDouble();
-                rv += mds.findPriceRange(des, lowPrice, highPrice);
+                temp = mds.findPriceRange(des, lowPrice, highPrice);
+                rv += temp;
             } else if (s.equals("PriceHike")) {
                 long minid = in.nextLong();
                 long maxid = in.nextLong();
                 double rate = in.nextDouble();
-                rv += mds.priceHike(minid, maxid, rate);
+                temp = mds.priceHike(minid, maxid, rate);
+                rv += temp;
             } else if (s.equals("Range")) {
                 double lowPrice = in.nextDouble();
                 double highPrice = in.nextDouble();
-                rv += mds.range(lowPrice, highPrice);
+                temp = mds.range(lowPrice, highPrice);
+                rv += temp;
             } else if (s.equals("SameSame")) {
-                rv += mds.samesame();
+                temp = mds.samesame();
+                rv += temp;
             } else if (s.equals("End")) {
                 break;
             } else {
                 System.out.println("Houston, we have a problem.\nUnexpected line in input: " + s);
                 System.exit(0);
             }
+            line++;
+            System.out.println(line + " :" + s + ": " + temp);
         }
-        mds.print();
-        System.out.println(rv);
+//        mds.print();
+        System.out.printf("%.2f\n", rv);
         System.out.println(timer.end());
     }
 }
