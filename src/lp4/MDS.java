@@ -1,50 +1,70 @@
 package lp4;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MDS {
     TreeMap<Long, Item> idItem = new TreeMap<>();
-    Map<Long, List<Item>> descItem = new HashMap<>();
+    Map<Long, TreeMap<Long, Item>> descItem = new HashMap<>();
 
     int insert(long id, double price, long[] description, int size) {
         Item item;
         int retValue = 1;
-        //If an entry with the same id already exists, its description and price are replaced by the new values
+        //If an entry with the same id already exists, its desc and price are replaced by the new values
         if (!idItem.containsKey(id)) {
-            item = new Item(id, description, price);
+            item = new Item(id, description, price, size);
             idItem.put(id, item);
         } else {
             retValue = 0;
             item = idItem.get(id);
-            //If description is empty, then just the price is updated.
+            //If desc is empty, then just the price is updated.
             if (size > 0) {
-                for (int i = 0; i < size; i++) {
-                    descItem.get(item.description[i]).remove(item);
-                }
-                item.description = description;
+                removeItemFromDescriptionMap(item);
+                item.setDescription(description, size);
             }
-            item.price = price;
+            item.setPrice(price);
         }
 
         for (int i = 0; i < size; i++) {
             if (!descItem.containsKey(description[i])) {
-                List<Item> s = new ArrayList<>();
-                s.add(item);
+                TreeMap<Long, Item> s = new TreeMap<>();
+                s.put(item.getItemId(), item);
                 descItem.put(description[i], s);
             } else {
-                descItem.get(description[i]).add(item);
+                descItem.get(description[i]).put(item.getItemId(), item);
             }
         }
 
         return retValue;
     }
 
+    private long removeItemFromDescriptionMap(Item item) {
+        long sum = 0;
+        for (int i = 0; i < item.size; i++) {
+            sum += item.desc[i];
+            descItem.get(item.desc[i]).remove(item.getItemId());
+            if (descItem.get(item.desc[i]).size() == 0)
+                descItem.remove(item.desc[i]);
+        }
+        return sum;
+    }
+
     double find(long id) {
+        if (idItem.containsKey(id)) {
+            return idItem.get(id).price;
+        }
         return 0;
     }
 
     long delete(long id) {
-        return 0;
+        long sum = 0;
+        if (idItem.containsKey(id)) {
+            Item item = idItem.get(id);
+            sum = removeItemFromDescriptionMap(item);
+            idItem.remove(item.itemId);
+        }
+        return sum;
     }
 
     double findMinPrice(long des) {
@@ -77,8 +97,9 @@ public class MDS {
         }
         for (Long i : descItem.keySet()) {
             System.out.print(i + ": ");
-            for (Item j : descItem.get(i))
-                System.out.print(j.itemId + ", ");
+            for (Long key : descItem.get(i).keySet()) {
+                System.out.print(descItem.get(i).get(key).itemId + ", ");
+            }
             System.out.println();
         }
         System.out.println();

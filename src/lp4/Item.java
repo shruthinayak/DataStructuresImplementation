@@ -5,29 +5,38 @@ package lp4;
  */
 public class Item {
     long itemId;
-    long[] description;
+    long[] desc;
     double price;
+    int size;
 
-    public Item(long itemId, long[] description, double price) {
+    public Item(long itemId, long[] description, double price, int size) {
         this.itemId = itemId;
-        this.description = description;
+        desc = new long[size];
+        for (int i = 0; i < size; i++) {
+            desc[i] = description[i];
+        }
         this.price = price;
+        this.size = size;
     }
 
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public long[] getDescription() {
-        return description;
+    public long[] getDesc() {
+        return desc;
     }
 
-    public void setDescription(long[] description) {
-        this.description = description;
+    public void setDescription(long[] description, int size) {
+        desc = new long[size];
+        for (int i = 0; i < size; i++) {
+            desc[i] = description[i];
+        }
+        this.size = size;
     }
 
     public long getItemId() {
