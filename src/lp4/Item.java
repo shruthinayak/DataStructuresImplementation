@@ -19,6 +19,10 @@ public class Item {
         this.size = size;
     }
 
+    public Item() {
+
+    }
+
     public double getPrice() {
         return price;
     }

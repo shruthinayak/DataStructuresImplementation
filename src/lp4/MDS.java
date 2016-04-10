@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class MDS {
+    final long MAX = -1l;
+    final long MIN = -2l;
     TreeMap<Long, Item> idItem = new TreeMap<>();
     Map<Long, TreeMap<Long, Item>> descItem = new HashMap<>();
 
@@ -27,12 +29,22 @@ public class MDS {
         }
 
         for (int i = 0; i < size; i++) {
-            if (!descItem.containsKey(description[i])) {
+
+            if (!descItem.containsKey(description[i])) { //for a particular description number
                 TreeMap<Long, Item> s = new TreeMap<>();
+                s.put(MAX, item);
+                s.put(MIN, item);
                 s.put(item.getItemId(), item);
                 descItem.put(description[i], s);
             } else {
-                descItem.get(description[i]).put(item.getItemId(), item);
+                TreeMap<Long, Item> longItemTreeMap = descItem.get(description[i]);
+                if (item.getPrice() > longItemTreeMap.get(MAX).getPrice()) {
+                    longItemTreeMap.put(MAX, item);
+                }
+                if (item.getPrice() < longItemTreeMap.get(MIN).getPrice()) {
+                    longItemTreeMap.put(MIN, item);
+                }
+                longItemTreeMap.put(item.getItemId(), item);
             }
         }
 
@@ -43,11 +55,42 @@ public class MDS {
         long sum = 0;
         for (int i = 0; i < item.size; i++) {
             sum += item.desc[i];
-            descItem.get(item.desc[i]).remove(item.getItemId());
-            if (descItem.get(item.desc[i]).size() == 0)
+            TreeMap<Long, Item> longItemTreeMap = descItem.get(item.desc[i]);
+            longItemTreeMap.remove(item.getItemId());
+
+            //if no other items left, delete the description number
+            if (longItemTreeMap.size() == 2)
                 descItem.remove(item.desc[i]);
+            else {
+                //else check if the deleted item was minimum of any of description list.
+                if (item.getItemId() == longItemTreeMap.get(MAX).getItemId() || item.getItemId() == longItemTreeMap.get(MIN).getItemId()) {
+                    rearrangeMaxMin(item, i);
+                }
+            }
+
         }
         return sum;
+    }
+
+    private void rearrangeMaxMin(Item item, int i) {
+
+        TreeMap<Long, Item> longItemTreeMap = descItem.get(item.desc[i]);
+        Item max = new Item();
+        Item min = new Item();
+        max.setPrice(Double.MIN_VALUE);
+        min.setPrice(Double.MAX_VALUE);
+        longItemTreeMap.put(MAX, max);
+        longItemTreeMap.put(MIN, min);
+        for (Long key : longItemTreeMap.keySet()) {
+            if (key != MAX && key != MIN) {
+                if (longItemTreeMap.get(key).getPrice() > max.getPrice()) {
+                    longItemTreeMap.put(MAX, longItemTreeMap.get(key));
+                }
+                if (longItemTreeMap.get(key).getPrice() < min.getPrice()) {
+                    longItemTreeMap.put(MIN, longItemTreeMap.get(key));
+                }
+            }
+        }
     }
 
     double find(long id) {
@@ -68,10 +111,16 @@ public class MDS {
     }
 
     double findMinPrice(long des) {
+        if (descItem.containsKey(des)) {
+            return descItem.get(des).get(MIN).getPrice();
+        }
         return 0;
     }
 
     double findMaxPrice(long des) {
+        if (descItem.containsKey(des)) {
+            return descItem.get(des).get(MAX).getPrice();
+        }
         return 0;
     }
 
@@ -96,9 +145,9 @@ public class MDS {
             System.out.println(idItem.get(i).toString());
         }
         for (Long i : descItem.keySet()) {
-            System.out.print(i + ": ");
+            System.out.print(i + "- ");
             for (Long key : descItem.get(i).keySet()) {
-                System.out.print(descItem.get(i).get(key).itemId + ", ");
+                System.out.print(key + ":" + descItem.get(i).get(key).price + ", ");
             }
             System.out.println();
         }
