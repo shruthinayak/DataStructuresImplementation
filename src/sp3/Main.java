@@ -14,13 +14,9 @@ public class Main {
         long n = 883;
         Timer time = new Timer();
 
-        time.timer();
         System.out.println(Fibonacci.linearFibonacci(883728292, p));
-        time.timer();
 
-        time.timer();
         System.out.println(Fibonacci.logFibonacci(883728292, p));
-        time.timer();
 
 //        b. Multipivot Quicksort
         Integer[] A = new Integer[3000000];
@@ -30,14 +26,10 @@ public class Main {
         Integer[] B = Arrays.copyOf(A, A.length);
 
 //        Integer[] A = {1, 5, 2, 2, 4, 9, 2, 2, 7, 2, 4, 4, 6, 1, 0, -10};
-        time.timer();
 //        MultipivotQuicksort.quickSort(A, 0, A.length - 1);
-        time.timer();
 //        System.out.println(Arrays.toString(A));
 
-        time.timer();
 //        MultipivotQuicksort.dualPivotSort(B, 0, A.length - 1);
-        time.timer();
 //        System.out.println(Arrays.toString(B));
 
     }

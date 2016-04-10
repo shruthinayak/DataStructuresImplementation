@@ -6,7 +6,7 @@ package lp4;
 public class Item {
     long itemId;
     long[] description;
-    long price;
+    double price;
 
     public Item(long itemId, long[] description, double price) {
         this.itemId = itemId;
@@ -14,7 +14,7 @@ public class Item {
         this.price = price;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -37,4 +37,10 @@ public class Item {
     public void setItemId(long itemId) {
         this.itemId = itemId;
     }
+
+    @Override
+    public String toString() {
+        return "(" + itemId + ", " + price + ")";
+    }
 }
+

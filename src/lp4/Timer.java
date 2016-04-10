@@ -17,7 +17,7 @@ public class Timer {
         startTime = System.currentTimeMillis();
     }
 
-    public void start() {
+    public void timer() {
         startTime = System.currentTimeMillis();
     }
 

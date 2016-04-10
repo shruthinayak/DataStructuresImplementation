@@ -80,6 +80,7 @@ public class LP4Driver {
                 System.exit(0);
             }
         }
+        mds.print();
         System.out.println(rv);
         System.out.println(timer.end());
     }
