@@ -3,7 +3,6 @@ package lp4;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 /**
  * Sample driver code for Project LP4.  Modify as needed.
@@ -17,11 +16,6 @@ public class LP4Driver {
 
     public static void main(String[] args) throws FileNotFoundException {
         Scanner in;
-//        args[0] = "lp4-data/lp4-1.txt";
-//        args[0] = "lp4-data/lp4-2.txt";
-//        args[0] = "lp4-data/lp4-3-1k.txt"; //52252.36
-//        args[0] = "lp4-data/lp4-4-5k.txt"; //490409.01
-        args[0] = "lp4-data/lp4-5-ck.txt"; //173819092858.24
         if (args.length > 0) {
             in = new Scanner(new File(args[0]));
         } else {
@@ -94,22 +88,8 @@ public class LP4Driver {
                 System.out.println("Houston, we have a problem.\nUnexpected line in input: " + s);
                 System.exit(0);
             }
-            line++;
-//            System.out.print(line + ": " + s + ": ");
-//            temp= Math.floor(temp*100)/100;
-            String a = temp + "";
-            if (a.endsWith(".0")) {
-                a = a.replace(".0", "");
-                //    System.out.println(a);
-            } else {
-                //   System.out.printf("%.2f\n", temp);
-            }
-            /*if(temp==1){
-                System.out.println(1);
-            }else{
-            System.out.printf("%.2f\n", temp);}*/
+//            System.out.println("" + line++);
         }
-//        mds.print();
         System.out.printf("%.2f\n", rv);
         System.out.println(timer.end());
     }

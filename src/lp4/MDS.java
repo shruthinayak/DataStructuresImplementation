@@ -3,12 +3,29 @@ package lp4;
 import java.math.BigInteger;
 import java.util.*;
 
+/**
+ * G21:
+ * Shruthi Ramesh, Nayak: sxn145130
+ * Tejasvee Bolisetty: txb140830
+ */
+
 public class MDS {
-    final long MAX = -1L;
-    final long MIN = -2L;
+    /*
+        idItem : A treemap of item-ids against item objects
+        descItem<key, List<Item>>: A map that has description number against all the items that has <key> as a part of their description
+    */
     TreeMap<Long, Item> idItem = new TreeMap<>();
     Map<Long, List<Item>> descItem = new HashMap<>();
 
+    /**
+     * Inserts an item.
+     *
+     * @param id           : Item id
+     * @param price:       Item price
+     * @param description: array of long ints
+     * @param size:        size of the array
+     * @return 1 if new object, 0 if old.
+     */
     int insert(long id, double price, long[] description, int size) {
         Item item;
         int retValue = 1;
@@ -30,8 +47,7 @@ public class MDS {
 
         for (int i = 0; i < size; i++) {
             if (!descItem.containsKey(description[i])) { //for a particular description number
-                List<Item> temp = new LinkedList<>();
-                descItem.put(description[i], temp);
+                descItem.put(description[i], new LinkedList<>());
             }
             descItem.get(description[i]).add(item);
         }
@@ -39,6 +55,11 @@ public class MDS {
         return retValue;
     }
 
+    /**
+     * Called when the item is deleted or the description is replaced.
+     * @param item item to be removed
+     * @return the sum of all the previous description ints
+     */
     private long removeItemFromDescriptionMap(Item item) {
         long sum = 0;
         for (int i = 0; i < item.size; i++) {
@@ -51,12 +72,22 @@ public class MDS {
         return sum;
     }
 
+    /**
+     * @param id Item id
+     * @return price of item with given id (or 0, if not found).
+     */
     double find(long id) {
         if (idItem.containsKey(id)) {
             return idItem.get(id).price;
         }
         return 0;
     }
+
+    /**
+     * delete item from storage
+     * @param id Item id
+     * @return Returns the sum of the long ints that are in the description of the item deleted (or 0, if such an id did not exist).
+     */
 
     long delete(long id) {
         long sum = 0;
@@ -68,6 +99,11 @@ public class MDS {
         return sum;
     }
 
+    /**
+     *
+     * @param des long integer description number
+     * @return find items whose description contains <des> and return lowest price of those items.
+     */
     double findMinPrice(long des) {
         if (descItem.containsKey(des)) {
             List<Item> list = descItem.get(des);
@@ -77,6 +113,11 @@ public class MDS {
         return 0;
     }
 
+    /**
+     *
+     * @param des long integer description number
+     * @return find items whose description contains <des> and return highest price of those items.
+     */
     double findMaxPrice(long des) {
         if (descItem.containsKey(des)) {
             List<Item> list = descItem.get(des);
@@ -86,6 +127,13 @@ public class MDS {
         return 0;
     }
 
+    /**
+     *
+     * @param des Item id
+     * @param lowPrice low
+     * @param highPrice high
+     * @return number of items whose description contains n, and their prices fall within the given range, [low, high]
+     */
     int findPriceRange(long des, double lowPrice, double highPrice) {
         int count = 0;
         if (descItem.containsKey(des)) {
@@ -96,9 +144,16 @@ public class MDS {
         return count;
     }
 
+    /**
+     * increase the price of every product, whose id is in the range [l,h], by r%
+     * @param minid lower item id
+     * @param maxid upper item id
+     * @param rate r% by which the hike should occur
+     * @return Returns the sum of the net increases of the prices.
+     */
+
     double priceHike(long minid, long maxid, double rate) {
         double netIncrease = 0;
-        //TODO: rearrange max min
         if (rate > 0) {
             for (long key : idItem.tailMap(minid).keySet()) {
                 if (key > maxid)
@@ -116,6 +171,12 @@ public class MDS {
         return Math.floor((value + 0.000001) * 100) / 100;
     }
 
+    /**
+     *
+     * @param lowPrice low
+     * @param highPrice high
+     * @return number of items whose price is at least "low" and at most "high".
+     */
     int range(double lowPrice, double highPrice) {
 
         int count = 0;
@@ -127,6 +188,7 @@ public class MDS {
         }
         return count;
     }
+
 
     int samesame() {
         HashMap<String, ArrayList<Item>> same = new HashMap<>();
@@ -152,19 +214,5 @@ public class MDS {
         }
         return count;
 
-    }
-
-    void print() {
-        for (Long i : idItem.keySet()) {
-            System.out.println(idItem.get(i).toString());
-        }
-        for (Long i : descItem.keySet()) {
-            System.out.print(i + "- ");
-            for (Item key : descItem.get(i)) {
-                System.out.print(key + ":" + key.price + ", ");
-            }
-            System.out.println();
-        }
-        System.out.println();
     }
 }

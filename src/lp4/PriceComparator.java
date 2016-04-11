@@ -3,8 +3,11 @@ package lp4;
 import java.util.Comparator;
 
 /**
- * Created by shruthi on 10/4/16.
+ * G21:
+ * Shruthi Ramesh, Nayak: sxn145130
+ * Tejasvee Bolisetty: txb140830
  */
+
 public class PriceComparator implements Comparator<Item> {
 
     @Override

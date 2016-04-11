@@ -1,7 +1,9 @@
 package lp4;
 
 /**
- * Created by shruthi on 9/4/16.
+ * G21:
+ * Shruthi Ramesh, Nayak: sxn145130
+ * Tejasvee Bolisetty: txb140830
  */
 public class Item {
     long itemId;
