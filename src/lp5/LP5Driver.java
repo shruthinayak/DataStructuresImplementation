@@ -8,7 +8,8 @@ public class LP5Driver {
     public static void main(String[] args) throws FileNotFoundException {
         Scanner in;
         boolean VERBOSE = false;
-        args = new String[]{"edges.txt"};
+        String path = "lp5-data";
+        args = new String[]{path + "/bip4.txt"};
         if (args.length > 0) {
             File inputFile = new File(args[0]);
             in = new Scanner(inputFile);
@@ -22,7 +23,7 @@ public class LP5Driver {
         BipartiteMatching b = new BipartiteMatching();
         if (b.checkBipartite(g)) {
             int size = b.maximumMatching(g);
-            System.out.println("max size" + size);
+            System.out.println("max size " + size);
         } else {
             System.out.println("G is not bipartite");
             return;

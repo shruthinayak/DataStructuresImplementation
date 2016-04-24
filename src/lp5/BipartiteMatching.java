@@ -3,9 +3,6 @@ package lp5;
 import java.util.LinkedList;
 import java.util.Queue;
 
-/**
- * Created by tejas on 4/23/2016.
- */
 public class BipartiteMatching {
     //bfs declare outer node inner nodes
     int msize = 0;
@@ -62,6 +59,7 @@ public class BipartiteMatching {
         }
         // Repeat: find augmenting path, increase size of matching
         while (true) {
+            boolean flag = false;
             Queue<Vertex> Q = new LinkedList<>();//Create an empty queue Q of vertices // for outer nodes only
             for (Vertex u : g.verts) {
                 if (u != null) {
@@ -73,6 +71,7 @@ public class BipartiteMatching {
                     }
                 }
             }
+            outerloop:
             while (!Q.isEmpty()) {
                 Vertex u = Q.poll();
                 for (Edge edge : u.Adj) {
@@ -81,8 +80,10 @@ public class BipartiteMatching {
                         v.parent = u;
                         v.seen = true;
                         if (v.mate == null) {//then // augmenting path has been found
+//                            flag=true;
                             processAugPath(v);
-                            break;//go to the beginning of Step 4
+                            break outerloop;//go to the beginning of Step 4
+//                            break ;//go to the beginning of Step 4
                         } else {
                             Vertex x = v.mate;
                             x.seen = true;
@@ -93,11 +94,12 @@ public class BipartiteMatching {
                 }
                 // Q got empty, but no augmenting path was found
 //                    Break out of the outer while loop of Step 4 and go to Step 5
-                /*if (Q.isEmpty()) {
-                    break;
-                }*/
+
             }
-            return msize;
+            if (Q.isEmpty() /*&& !flag*/) {
+//                break;
+                return msize;
+            }
         }
     }
 
