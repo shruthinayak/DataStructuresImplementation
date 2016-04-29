@@ -2,12 +2,15 @@ package lp5;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.security.spec.ECGenParameterSpec;
 import java.util.Scanner;
 
 /**
- * Created by tejas on 4/28/2016.
+ * G21:
+ * Shruthi Ramesh, Nayak: sxn145130
+ * Tejasvee Bolisetty: txb140830
  */
+
+
 public class LP5Lev1 {
 
     public static void main(String[] args) throws FileNotFoundException {
