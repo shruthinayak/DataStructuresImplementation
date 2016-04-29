@@ -14,7 +14,7 @@ public class Vertex implements Index {
     public boolean strong; //flag to keep track of
     public Vertex parent; // parent of the vertex
     public int distance; // distance to the vertex from the source vertex
-    public List<Edge> Adj, revAdj; // adjacency list; use MyLinkedList or
+    public List<Edge> Adj, revAdj; // adjacency processedVertices; use MyLinkedList or
     // ArrayList
     public int degree; // indegree in case of directed graph.
     public int index;
@@ -24,7 +24,8 @@ public class Vertex implements Index {
     public int count;
     public boolean isOuter;
     public int tsp; //total shortest paths to this vertex
-    public Vertex mate;
+    public Vertex mate; // matching vertex
+    public boolean processed; //whether vertex is already processed for finding new matching
 
 
     /**
@@ -45,6 +46,7 @@ public class Vertex implements Index {
         pathLength = Integer.MAX_VALUE;
         count = 0;
         mate = null;
+        processed = false;
 //        isOuter=false;
 
     }
