@@ -84,7 +84,7 @@ public class BipartiteMatching {
                     }
                 }
             }
-            System.out.println("iteration " + i++);
+//            System.out.println("iteration " + i++);
             outerloop:
             while (!Q.isEmpty()) {
                 Vertex u = Q.poll();
@@ -162,6 +162,12 @@ public class BipartiteMatching {
             if (v != null) v.mate = null;
         }
         return msize;
+    }
+
+    public void resetSeen(Graph g) {
+        for (Vertex v : g.verts) {
+            if (v != null) v.seen = false;
+        }
     }
 }
 
