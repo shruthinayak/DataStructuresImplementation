@@ -1,5 +1,6 @@
 package lp3;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -11,7 +12,7 @@ import java.util.Scanner;
  */
 public class Solution {
     public static void main(String[] args) throws FileNotFoundException {
-        Graph g = Graph.createGraphFromUserInput(new Scanner(System.in), true);
+        Graph g = Graph.createGraphFromUserInput(new Scanner(new File("/home/shruthi/AllFiles/OneDrive/Sem4/Impl/lp3-test/bfs50.txt")), true);
         ShortestPath sp = null;
         Vertex src = g.getRoot(1);
         if (g.uniform) {
