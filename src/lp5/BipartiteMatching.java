@@ -14,7 +14,6 @@ import java.util.Queue;
 public class BipartiteMatching {
     //bfs declare outer node inner nodes
     int msize = 0;
-
     ArrayList<Vertex> processedVertices = new ArrayList<>(); //consists of all the processed vertices while Q is not empty
 
     /**
@@ -87,7 +86,6 @@ public class BipartiteMatching {
                 }
             }
 //            System.out.println("iteration " + i++);
-            outerloop:
             while (!Q.isEmpty()) {
                 Vertex u = Q.poll();
                 for (Edge edge : u.Adj) {
@@ -124,7 +122,7 @@ public class BipartiteMatching {
      *
      * @param u
      */
-    private void processAugPath(Vertex u) {
+    public void processAugPath(Vertex u) {
         // u is a free inner node with an augmenting path to the root of the tree
         Vertex temp = u;
         while (temp != null) {
@@ -158,7 +156,7 @@ public class BipartiteMatching {
      * @param g
      * @return
      */
-    private int initializeGraph(Graph g) {
+    public int initializeGraph(Graph g) {
         int msize = 0;
         for (Vertex v : g.verts) {
             if (v != null) v.mate = null;

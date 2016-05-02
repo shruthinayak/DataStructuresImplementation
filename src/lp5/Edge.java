@@ -11,6 +11,7 @@ public class Edge {
     public int component; // which component the edge belongs to of the vertex
     public int actualWeight; // storing the actual edge weight of graph
     public boolean D;
+    public boolean T;
 
     /**
      * Constructor for Edge

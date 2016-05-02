@@ -48,8 +48,6 @@ public class LP5Lev1 {
                         }
                     }
                 }
-//                     Output the edges of M.
-
             }
 
         } else {

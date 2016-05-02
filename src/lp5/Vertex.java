@@ -24,8 +24,10 @@ public class Vertex implements Index {
     public int count;
     public boolean isOuter;
     public int tsp; //total shortest paths to this vertex
+    public int label;
     public Vertex mate; // matching vertex
     public boolean processed; //whether vertex is already processed for finding new matching
+    public boolean D;
 
 
     /**
@@ -47,6 +49,7 @@ public class Vertex implements Index {
         count = 0;
         mate = null;
         processed = false;
+        label = 0;
 //        isOuter=false;
 
     }
